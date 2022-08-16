@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/color_FFFFFF">
+
+    <include layout="@layout/include_title"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="@color/color_F7F7F7"/>
+
+    <LinearLayout
+        android:id="@+id/ll_password"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:orientation="horizontal"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginEnd="@dimen/dp_12">
+
+        <TextView
+            android:id="@+id/tv_psd_tip_1"
+            android:layout_width="@dimen/dp_75"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/sp_13"
+            android:textColor="@color/color_333333"
+            android:text="@string/new_password_set"
+            android:gravity="center_vertical"
+            tools:ignore="RtlSymmetry" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="@dimen/dp_14"
+            android:background="@color/color_CECECE"
+            android:layout_gravity="center_vertical" />
+
+        <com.slxk.hounddog.mvp.ui.view.ClearEditText
+            android:id="@+id/edt_password"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:textSize="@dimen/sp_13"
+            android:inputType="textPassword"
+            android:digits="0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM._"
+            android:textColor="@color/color_333333"
+            android:textColorHint="@color/color_999999"
+            android:hint="@string/input_new_password"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_password"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:background="@color/color_E5E5E5"/>
+
+    <LinearLayout
+        android:id="@+id/ll_password_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:orientation="horizontal"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginEnd="@dimen/dp_12">
+
+        <TextView
+            android:id="@+id/tv_psd_tip_2"
+            android:layout_width="@dimen/dp_75"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/sp_13"
+            android:textColor="@color/color_333333"
+            android:text="@string/new_password_confirm"
+            android:gravity="center_vertical"
+            tools:ignore="RtlSymmetry" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="@dimen/dp_14"
+            android:background="@color/color_CECECE"
+            android:layout_gravity="center_vertical" />
+
+        <com.slxk.hounddog.mvp.ui.view.ClearEditText
+            android:id="@+id/edt_password_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:textSize="@dimen/sp_13"
+            android:inputType="textPassword"
+            android:digits="0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM._"
+            android:textColor="@color/color_333333"
+            android:textColorHint="@color/color_999999"
+            android:hint="@string/input_new_password_confirm"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_password_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/color_E5E5E5"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginEnd="@dimen/dp_12"/>
+
+    <Button
+        android:id="@+id/btn_bind"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:background="@drawable/bg_00c8f8_fillet_6"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_35"
+        android:gravity="center"
+        android:textSize="@dimen/sp_16"
+        android:text="@string/confirm"
+        android:textColor="@color/color_FFFFFF"/>
+
+</LinearLayout>

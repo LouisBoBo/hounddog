@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_map"
+        android:layout_width="@dimen/dp_47"
+        android:layout_height="@dimen/dp_49"
+        android:src="@drawable/icon_map_amap"/>
+
+    <TextView
+        android:id="@+id/tv_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_13"
+        android:layout_marginTop="@dimen/dp_10"
+        android:textColor="@color/color_333333"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/map_amap"/>
+
+</LinearLayout>

@@ -1,0 +1,631 @@
+package com.slxk.hounddog.mvp.ui.activity;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.PersistableBundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.maps.AMap;
+import com.amap.api.maps.AMapUtils;
+import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptor;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.CameraPosition;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.LatLngBounds;
+import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.maps.model.TileOverlay;
+import com.amap.api.maps.model.TileOverlayOptions;
+import com.amap.api.maps.model.UrlTileProvider;
+import com.jess.arms.base.BaseActivity;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.ArmsUtils;
+import com.slxk.hounddog.R;
+import com.slxk.hounddog.app.MyApplication;
+import com.slxk.hounddog.di.component.DaggerNavigationAmapComponent;
+import com.slxk.hounddog.mvp.contract.NavigationAmapContract;
+import com.slxk.hounddog.mvp.model.api.Api;
+import com.slxk.hounddog.mvp.presenter.NavigationAmapPresenter;
+import com.slxk.hounddog.mvp.utils.AddressParseUtil;
+import com.slxk.hounddog.mvp.utils.BitmapHelperAmap;
+import com.slxk.hounddog.mvp.utils.ConstantValue;
+import com.slxk.hounddog.mvp.utils.FileUtilApp;
+import com.slxk.hounddog.mvp.utils.MapImageCache;
+import com.slxk.hounddog.mvp.utils.Utils;
+import com.slxk.hounddog.mvp.weiget.NavigationDialog;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.jess.arms.utils.Preconditions.checkNotNull;
+
+
+/**
+ * ================================================
+ * Description:
+ * <p>
+ * Created by MVPArmsTemplate on 01/13/2022 11:39
+ * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
+ * <a href="https://github.com/JessYanCoding">Follow me</a>
+ * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
+ * <a href="https://github.com/JessYanCoding/MVPArms/wiki">See me</a>
+ * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
+ * ================================================
+ */
+public class NavigationAmapActivity extends BaseActivity<NavigationAmapPresenter> implements NavigationAmapContract.View,
+        AMapLocationListener, AMap.OnCameraChangeListener {
+
+    @BindView(R.id.mapView)
+    MapView mapView;
+    @BindView(R.id.iv_navigation)
+    ImageView ivNavigation;
+    @BindView(R.id.tv_distance)
+    TextView tvDistance;
+    @BindView(R.id.tv_address)
+    TextView tvAddress;
+    @BindView(R.id.tv_address_hint)
+    TextView tvAddressHint;
+
+    private long mDeviceLatitude = 0; // 设备纬度
+    private long mDeviceLongitude = 0; // 设备经度
+    private int mDeviceState = 2; // 设备状态
+    private static final String Intent_Lat_Key = "lat_key";
+    private static final String Intent_Lon_Key = "lon_key";
+    private static final String Intent_State_Key = "state_key";
+
+    private double mDeviceLat;
+    private double mDeviceLon;
+
+    private AMap mAMap;
+    private float mZoom = 16;
+    //声明mlocationClient对象
+    private AMapLocationClient mlocationClient;
+    //声明mLocationOption对象
+    private AMapLocationClientOption mLocationOption;
+    private MyLocationStyle myLocationStyle;
+    private BitmapHelperAmap bitmapHelperAmap;
+    private LatLngBounds bounds;
+    private int size;
+
+    private double mLatitude = 0.0; // 定位获取到的纬度
+    private double mLongitude = 0.0; // 定位获取到的经度
+    private LatLng userLocation;
+    private LatLng carLocation;
+
+    // 谷歌瓦片地图
+    // 判断当前使用高德地图，还是高德地图的谷歌瓦片地图
+    private TileOverlay mtileOverlay;
+    private int mapType = 0; // 地图类型,0：高德地图，1：百度地图，2：谷歌地图
+    private boolean isChina = false; // 是否在中国
+    private String ALBUM_PATH = FileUtilApp.File_Google_Map; // 存储路径
+    private String mapUrl = Api.Map_2D; // 请求地图url地址
+    private boolean isSatelliteMap = false; // 是否是卫星地图
+
+    public static Intent newInstance(long lat, long lon, int state) {
+        Intent intent = new Intent(MyApplication.getMyApp(), NavigationAmapActivity.class);
+        intent.putExtra(Intent_Lat_Key, lat);
+        intent.putExtra(Intent_Lon_Key, lon);
+        intent.putExtra(Intent_State_Key, state);
+        return intent;
+    }
+
+    @Override
+    public void setupActivityComponent(@NonNull AppComponent appComponent) {
+        DaggerNavigationAmapComponent.builder()
+                .appComponent(appComponent)
+                .view(this)
+                .build()
+                .inject(this);
+    }
+
+    @Override
+    public int initView(@Nullable Bundle savedInstanceState) {
+        return R.layout.activity_navigation_amap;//setContentView(id);
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void initData(@Nullable Bundle savedInstanceState) {
+        mapView.onCreate(savedInstanceState);
+        setTitle(getString(R.string.menu_0));
+        mDeviceLatitude = getIntent().getLongExtra(Intent_Lat_Key, 0);
+        mDeviceLongitude = getIntent().getLongExtra(Intent_Lon_Key, 0);
+        mDeviceState = getIntent().getIntExtra(Intent_State_Key, 2);
+        isChina = ConstantValue.isInChina();
+        mapType = ConstantValue.getMapType();
+        isSatelliteMap = ConstantValue.isMapSatelliteMap();
+
+        mDeviceLat = (double) mDeviceLatitude / 1000000;
+        mDeviceLon = (double) mDeviceLongitude / 1000000;
+        carLocation = new LatLng(mDeviceLat, mDeviceLon);
+        bitmapHelperAmap = new BitmapHelperAmap(this);
+        tvAddressHint.setText(getString(R.string.address) + "：");
+
+        initMaps();
+
+        MarkerOptions markerOption = new MarkerOptions();
+        markerOption.position(carLocation);
+        markerOption.icon(getMarkerIcon());
+        markerOption.anchor(0.5f, 1);
+        markerOption.draggable(false);
+        markerOption.visible(true);
+        mAMap.addMarker(markerOption);
+
+        AddressParseUtil.getAmapAddress(this, tvAddress, mDeviceLat, mDeviceLon, "");
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    private void initMaps() {
+        if (mAMap == null) {
+            mAMap = mapView.getMap();
+            mAMap.getUiSettings().setZoomControlsEnabled(false);
+            mAMap.getUiSettings().setRotateGesturesEnabled(false);
+            mAMap.setOnCameraChangeListener(this);
+            mAMap.setMyLocationEnabled(true);
+
+            if (mapType == 2 && isChina) {
+                mAMap.showMapText(false);
+                //设置Logo下边界距离屏幕底部的边距,设置为负值即可
+                mAMap.getUiSettings().setLogoBottomMargin(-150);
+                //在线瓦片数据
+                onModifyMapType(isSatelliteMap);
+            } else {
+                mAMap.setMapType(isSatelliteMap ? AMap.MAP_TYPE_SATELLITE : AMap.MAP_TYPE_NORMAL);
+            }
+
+            mlocationClient = new AMapLocationClient(this);
+            //初始化定位参数
+            mLocationOption = new AMapLocationClientOption();
+            //设置定位监听
+            mlocationClient.setLocationListener(this);
+            //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+            mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+            //设置定位间隔,单位毫秒,默认为2000ms
+            mLocationOption.setInterval(10000);
+            // 设置获取手机传感器方向
+            mLocationOption.setSensorEnable(true);
+            //设置定位参数
+            mlocationClient.setLocationOption(mLocationOption);
+            // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
+            // 注意设置合适的定位时间的间隔（最小间隔支持为1000ms），并且在合适时间调用stopLocation()方法来取消定位请求
+            // 在定位结束后，在合适的生命周期调用onDestroy()方法
+            // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
+
+            myLocationStyle = new MyLocationStyle();//初始化定位蓝点样式类myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
+            myLocationStyle.interval(10000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
+            mAMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
+            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE);//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
+            myLocationStyle.myLocationIcon(bitmapHelperAmap.getBitmapZoomForUserLocation(mZoom));
+            myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));
+            myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));
+            myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
+            // 设置定位监听
+            mAMap.setMyLocationStyle(myLocationStyle);
+            mAMap.setMyLocationEnabled(true);
+        }
+    }
+
+    /**
+     * 显示谷歌瓦片地图
+     */
+    private void onShowGoogleMap() {
+        if (mapType == 2 && isChina) {
+            //在线瓦片数据
+            useOMCMap();
+        }
+    }
+
+    @SuppressLint({"LogNotTimber", "SetTextI18n"})
+    @Override
+    public void onLocationChanged(AMapLocation aMapLocation) {
+        if (aMapLocation != null) {
+            if (aMapLocation.getErrorCode() == 0) {
+                //定位成功回调信息，设置相关消息
+//                aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+//                aMapLocation.getLatitude();//获取纬度
+//                aMapLocation.getLongitude();//获取经度
+//                aMapLocation.getAccuracy();//获取精度信息
+
+                mLatitude = aMapLocation.getLatitude();
+                mLongitude = aMapLocation.getLongitude();
+                MyApplication.getMyApp().setLatitude(mLatitude);
+                MyApplication.getMyApp().setLongitude(mLongitude);
+
+                userLocation = new LatLng(mLatitude, mLongitude);
+
+                // 计算量坐标点距离
+                float distance = AMapUtils.calculateLineDistance(userLocation, carLocation);
+                calcuteSize(distance);
+
+                if (userLocation != null && carLocation != null) {
+                    zoomMap(userLocation, carLocation);
+                }
+
+                if (distance >= 1000) {
+                    tvDistance.setText(getString(R.string.distance_between_people_and_equipment) + "：" + Utils.formatValue(distance / 1000) + "km");
+                } else {
+                    tvDistance.setText(getString(R.string.distance_between_people_and_equipment) + "：" + Utils.formatValue(distance)
+                            + getString(R.string.meter));
+                }
+
+                ivNavigation.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        onShowGoogleMap();
+                    }
+                }, 550);
+
+                if (mlocationClient != null) {
+                    mlocationClient.stopLocation();
+                }
+            } else {
+                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+                Log.e("AmapError", "location Error, ErrCode:"
+                        + aMapLocation.getErrorCode() + ", errInfo:"
+                        + aMapLocation.getErrorInfo());
+            }
+        }
+    }
+
+    @Override
+    public void onCameraChange(CameraPosition cameraPosition) {
+
+    }
+
+    @Override
+    public void onCameraChangeFinish(CameraPosition cameraPosition) {
+        mZoom = cameraPosition.zoom;
+    }
+
+    /**
+     * 绘制设备图标等信息
+     *
+     * @return
+     */
+    private BitmapDescriptor getMarkerIcon() {
+        View view = View.inflate(this, R.layout.layout_marker_navigation, null);
+        ImageView ivCar = view.findViewById(R.id.iv_car);
+        ivCar.setImageResource(R.drawable.icon_device_line_on);
+
+//        switch (mDeviceState) {
+//            case 0:
+//                ivCar.setImageResource(R.drawable.icon_device_static);
+//                break;
+//            case 1:
+//                ivCar.setImageResource(R.drawable.icon_device_on);
+//                break;
+//            case 2:
+//                ivCar.setImageResource(R.drawable.icon_device_off);
+//                break;
+//        }
+        return convertViewToBitmap(view);
+    }
+
+    private static BitmapDescriptor convertViewToBitmap(View view) {
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        return BitmapDescriptorFactory.fromBitmap(view.getDrawingCache());
+    }
+
+    /**
+     * 计算地图缩放距离边距距离
+     *
+     * @param distance 两经纬度之间的距离
+     */
+    private void calcuteSize(float distance) {
+        if (distance <= 5000) {
+            size = 120;
+        } else if (distance > 5000 && distance <= 10000) {
+            size = 150;
+        } else if (distance > 10000 && distance < 1000000) {
+            size = 180;
+        } else if (distance > 100000 && distance < 500000) {
+            size = 200;
+        } else if (distance > 500000 && distance < 1000000) {
+            size = 250;
+        } else if (distance > 1000000) {
+            size = 300;
+        }
+    }
+
+    /**
+     * 缩放地图
+     */
+    private void zoomMap(LatLng peoLatLng, LatLng carLatLng) {
+        bounds = new LatLngBounds.Builder()
+                .include(peoLatLng)
+                .include(carLatLng)
+                .build();
+        mAMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, size));
+    }
+
+    @Override
+    protected void onResume() {
+        //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
+        mapView.onResume();
+        if (mlocationClient != null) {
+            mlocationClient.startLocation();
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        //在activity执行onPause时执行mMapView.onPause ()，暂停地图的绘制
+        mapView.onPause();
+        if (mlocationClient != null) {
+            mlocationClient.stopLocation();
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
+        if (mlocationClient != null) {
+            mlocationClient.stopLocation();
+            mlocationClient.onDestroy();
+            mlocationClient = null;
+        }
+        if (mapView != null) {
+            mapView.onDestroy();
+        }
+        super.onDestroy();
+    }
+
+    @Override
+    public void showMessage(@NonNull String message) {
+        checkNotNull(message);
+        ArmsUtils.snackbarText(message);
+    }
+
+    @Override
+    public void launchActivity(@NonNull Intent intent) {
+        checkNotNull(intent);
+        ArmsUtils.startActivity(intent);
+    }
+
+    @Override
+    public void killMyself() {
+        finish();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
+    @OnClick(R.id.iv_navigation)
+    public void onViewClicked() {
+        if (Utils.isButtonQuickClick()) {
+            NavigationDialog dialog = new NavigationDialog();
+            dialog.show(getSupportFragmentManager(), mDeviceLat, mDeviceLon);
+        }
+    }
+
+
+    // ------------------------------------------ 谷歌瓦片地图 -------------------------------------------
+
+    /**
+     * 修改地图类型
+     *
+     * @param isSatelliteMap 是否是卫星地图
+     */
+    private void onModifyMapType(boolean isSatelliteMap) {
+        if (mtileOverlay != null) {
+            mtileOverlay.remove();
+        }
+        if (isSatelliteMap) {
+            // 卫星地图
+            mapUrl = Api.Map_SatelliteMap;
+            ALBUM_PATH = FileUtilApp.File_Google_Map_SatelliteMap;
+        } else {
+            // 2D地图
+            mapUrl = Api.Map_2D;
+            ALBUM_PATH = FileUtilApp.File_Google_Map;
+        }
+
+        useOMCMap();
+    }
+
+    /**
+     * 获取文件夹路径
+     *
+     * @param path
+     * @return
+     */
+    private String getMapPath(String path) {
+        return Environment.getExternalStorageDirectory() + path + "/";
+    }
+
+    /**
+     * 加载在线瓦片数据
+     */
+    private void useOMCMap() {
+        TileOverlayOptions tileOverlayOptions =
+                new TileOverlayOptions().tileProvider(new UrlTileProvider(256, 256) {
+                    @SuppressLint("DefaultLocale")
+                    @Override
+                    public URL getTileUrl(int x, int y, int zoom) {
+                        try {
+                            //return new URL(String.format(url, zoom + 1, TileXYToQuadKey(x, y, zoom)));
+                            //return new URL(String.format(url, x, y, zoom));
+                            String mFileDirName;
+                            String mFileName;
+                            mFileDirName = String.format("L%02d/", zoom + 1);
+                            mFileName = String.format("%s", TileXYToQuadKey(x, y, zoom));//为了不在手机的图片中显示,取消jpg后缀,文件名自己定义,写入和读取一致即可,由于有自己的bingmap图源服务,所以此处我用的bingmap的文件名
+                            String LJ = getMapPath(ALBUM_PATH) + mFileDirName + mFileName;
+                            if (MapImageCache.getInstance().isBitmapExit(mFileDirName + mFileName, ALBUM_PATH)) {//判断本地是否有图片文件,如果有返回本地url,如果没有,缓存到本地并返回googleurl
+                                return new URL("file://" + LJ);
+                            } else {
+                                String filePath = String.format(mapUrl, x, y, zoom);
+                                Bitmap mBitmap;
+                                //mBitmap = BitmapFactory.decodeStream(getImageStream(filePath));//不知什么原因导致有大量的图片存在坏图,所以重写InputStream写到byte数组方法
+                                mBitmap = getImageBitmap(getImageStream(filePath));
+                                try {
+                                    saveFile(mBitmap, mFileName, mFileDirName);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                return new URL(filePath);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                });
+        tileOverlayOptions.diskCacheEnabled(false)   //由于自带的缓存在关闭程序后会自动释放,所以无意义,关闭本地缓存
+                .diskCacheDir("/storage/emulated/0/amap/OMCcache")
+                .diskCacheSize(1024000)
+                .memoryCacheEnabled(true)
+                .memCacheSize(102400)
+                .zIndex(-9999);
+        mtileOverlay = mAMap.addTileOverlay(tileOverlayOptions);
+    }
+
+    /**
+     * 瓦片数据坐标转换
+     */
+    private String TileXYToQuadKey(int tileX, int tileY, int levelOfDetail) {
+        StringBuilder quadKey = new StringBuilder();
+        for (int i = levelOfDetail; i > 0; i--) {
+            char digit = '0';
+            int mask = 1 << (i - 1);
+            if ((tileX & mask) != 0) {
+                digit++;
+            }
+            if ((tileY & mask) != 0) {
+                digit++;
+                digit++;
+            }
+            quadKey.append(digit);
+        }
+        return quadKey.toString();
+    }
+
+    public Bitmap getImageBitmap(InputStream imputStream) {
+        // 将所有InputStream写到byte数组当中
+        byte[] targetData = null;
+        byte[] bytePart = new byte[4096];
+        while (true) {
+            try {
+                int readLength = imputStream.read(bytePart);
+                if (readLength == -1) {
+                    break;
+                } else {
+                    byte[] temp = new byte[readLength + (targetData == null ? 0 : targetData.length)];
+                    if (targetData != null) {
+                        System.arraycopy(targetData, 0, temp, 0, targetData.length);
+                        System.arraycopy(bytePart, 0, temp, targetData.length, readLength);
+                    } else {
+                        System.arraycopy(bytePart, 0, temp, 0, readLength);
+                    }
+                    targetData = temp;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        // 指使Bitmap通过byte数组获取数据
+        Bitmap bitmap = BitmapFactory.decodeByteArray(targetData, 0, targetData.length);
+        return bitmap;
+    }
+
+    public InputStream getImageStream(String path) throws Exception {
+        URL url = new URL(path);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setConnectTimeout(5000);
+        conn.setRequestMethod("GET");
+        if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+            return conn.getInputStream();
+        }
+        return null;
+    }
+
+    /**
+     * 保存文件
+     */
+    public void saveFile(final Bitmap bm, final String fileName, final String fileDirName) throws IOException {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (bm != null) {
+                        File dirFile = new File(getMapPath(ALBUM_PATH) + fileDirName);
+                        if (!dirFile.exists()) {
+                            dirFile.mkdir();
+                        }
+                        File myCaptureFile = new File(getMapPath(ALBUM_PATH) + fileDirName + fileName);
+                        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(myCaptureFile));
+                        bm.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+                        bos.flush();
+                        bos.close();
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
+     * 删除文件
+     */
+    static void deleteAllFiles(File root) {
+        File files[] = root.listFiles();
+        if (files != null)
+            for (File f : files) {
+                if (f.isDirectory()) { // 判断是否为文件夹
+                    deleteAllFiles(f);
+                    try {
+                        f.delete();
+                    } catch (Exception e) {
+                    }
+                } else {
+                    if (f.exists()) { // 判断是否存在
+                        deleteAllFiles(f);
+                        try {
+                            f.delete();
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+            }
+    }
+
+}

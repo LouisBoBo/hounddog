@@ -1,0 +1,13 @@
+[
+{
+  "directory": "G:/KyWork/Android/hounddog/webrtc_ns/.cxx/cmake/debug/armeabi",
+  "command": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe --target=armv5te-none-linux-androideabi --gcc-toolchain=D:/Android/AndroidSDK/android-ndk-r16b/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64 --sysroot=D:/Android/AndroidSDK/android-ndk-r16b/sysroot -Dwebrtc_ns_EXPORTS -I../../../../src/main/include  -isystem D:/Android/AndroidSDK/android-ndk-r16b/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=19 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv5te -mtune=xscale -msoft-float -fno-integrated-as -mthumb -Wa,--noexecstack -Wformat -Werror=format-security  -O0 -fno-limit-debug-info  -fPIC   -o CMakeFiles\\webrtc_ns.dir\\src\\main\\cpp\\noise_suppression.c.o   -c G:\\KyWork\\Android\\hounddog\\webrtc_ns\\src\\main\\cpp\\noise_suppression.c",
+  "file": "G:/KyWork/Android/hounddog/webrtc_ns/src/main/cpp/noise_suppression.c"
+},
+
+{
+  "directory": "G:/KyWork/Android/hounddog/webrtc_ns/.cxx/cmake/debug/armeabi",
+  "command": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe --target=armv5te-none-linux-androideabi --gcc-toolchain=D:/Android/AndroidSDK/android-ndk-r16b/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64 --sysroot=D:/Android/AndroidSDK/android-ndk-r16b/sysroot -Dwebrtc_ns_EXPORTS -I../../../../src/main/include  -isystem D:/Android/AndroidSDK/android-ndk-r16b/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=19 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv5te -mtune=xscale -msoft-float -fno-integrated-as -mthumb -Wa,--noexecstack -Wformat -Werror=format-security  -O0 -fno-limit-debug-info  -fPIC   -o CMakeFiles\\webrtc_ns.dir\\src\\main\\cpp\\noise_suppression_jni.c.o   -c G:\\KyWork\\Android\\hounddog\\webrtc_ns\\src\\main\\cpp\\noise_suppression_jni.c",
+  "file": "G:/KyWork/Android/hounddog/webrtc_ns/src/main/cpp/noise_suppression_jni.c"
+}
+]

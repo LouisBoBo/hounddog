@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/rl_bluetooth_set">
+
+    <ImageView
+        android:id="@+id/iv_bg"
+        android:layout_width="@dimen/dp_95"
+        android:layout_height="@dimen/dp_105"
+        android:src="@drawable/icon_bluetooth_set_bg"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/dp_35"/>
+
+    <LinearLayout
+        android:id="@+id/ll_function"
+        android:layout_width="@dimen/dp_85"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentEnd="true"
+        android:background="@color/transparent"
+        android:layout_marginEnd="@dimen/dp_43"
+        android:layout_marginTop="@dimen/dp_5">
+
+        <TextView
+            android:id="@+id/tv_disconnect"
+            android:layout_width="@dimen/dp_65"
+            android:layout_height="@dimen/dp_47"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:textSize="@dimen/sp_12"
+            android:textColor="@color/color_000000"
+            android:gravity="center"
+            android:text="@string/disconnect"/>
+
+        <View
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="1dp"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:background="@color/color_E5E5E5"/>
+
+        <TextView
+            android:id="@+id/tv_firmware_upgrade"
+            android:layout_width="@dimen/dp_65"
+            android:layout_height="@dimen/dp_47"
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:textSize="@dimen/sp_12"
+            android:textColor="@color/color_000000"
+            android:gravity="center"
+            android:text="@string/firmware_upgrade"/>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,993 @@
+package com.slxk.hounddog.mvp.ui.activity;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.TextView;
+
+import com.blankj.utilcode.util.LogUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.clj.fastble.BleManager;
+import com.clj.fastble.data.BleDevice;
+import com.jess.arms.base.BaseActivity;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.ArmsUtils;
+import com.slxk.hounddog.R;
+import com.slxk.hounddog.app.MyApplication;
+import com.slxk.hounddog.db.BluetoothModel;
+import com.slxk.hounddog.db.MyDao;
+import com.slxk.hounddog.di.component.DaggerConnectDeviceComponent;
+import com.slxk.hounddog.mvp.contract.ConnectDeviceContract;
+import com.slxk.hounddog.mvp.model.api.Api;
+import com.slxk.hounddog.mvp.model.bean.BluetoothBean;
+import com.slxk.hounddog.mvp.model.bean.BluetoothUpgradeVersionBean;
+import com.slxk.hounddog.mvp.presenter.ConnectDevicePresenter;
+import com.slxk.hounddog.mvp.ui.adapter.BluetoothConnectAdapter;
+import com.slxk.hounddog.mvp.ui.adapter.BluetoothNotConnectAdapter;
+import com.slxk.hounddog.mvp.utils.BluetoothManagerUtil;
+import com.slxk.hounddog.mvp.utils.BluetoothUtils;
+import com.slxk.hounddog.mvp.utils.BroadcastReceiverUtil;
+import com.slxk.hounddog.mvp.utils.ConstantValue;
+import com.slxk.hounddog.mvp.utils.FileUtilApp;
+import com.slxk.hounddog.mvp.utils.StringToSixthUtils;
+import com.slxk.hounddog.mvp.utils.ToastUtils;
+import com.slxk.hounddog.mvp.utils.Utils;
+import com.slxk.hounddog.mvp.weiget.BlueDisconnectDialog;
+import com.slxk.hounddog.mvp.weiget.BluetoothSetPopupwindow;
+import com.slxk.hounddog.mvp.weiget.BluetoothUpgradeDownloadDialog;
+import com.slxk.hounddog.mvp.weiget.UpgradeProgressDialog;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+import static com.jess.arms.utils.Preconditions.checkNotNull;
+
+
+/**
+ * ================================================
+ * Description: 蓝牙-连接设备界面
+ * <p>
+ * Created by MVPArmsTemplate on 12/22/2021 17:08
+ * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
+ * <a href="https://github.com/JessYanCoding">Follow me</a>
+ * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
+ * <a href="https://github.com/JessYanCoding/MVPArms/wiki">See me</a>
+ * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
+ * ================================================
+ */
+public class ConnectDeviceActivity extends BaseActivity<ConnectDevicePresenter> implements ConnectDeviceContract.View {
+
+
+    @BindView(R.id.rv_connect)
+    RecyclerView rvConnect;
+    @BindView(R.id.rv_not_connect)
+    RecyclerView rvNotConnect;
+    @BindView(R.id.tv_connected_hint)
+    TextView tvConnectedHint;
+
+    private static final String TAG = "ConnectDeviceActivity";
+    private static final int REQUEST_CODE_OPEN_GPS = 1;
+    private static final int REQUEST_CODE_PERMISSION_LOCATION = 2;
+    // 已配对过的蓝牙列表
+    private ArrayList<BluetoothModel> mBluetoothModels;
+    // 蓝牙设备信息处理Dao
+    private MyDao mBluetoothBeanDao;
+    // 扫描到的蓝牙列表
+    private ArrayList<BleDevice> mBleDeviceList;
+    // 已连接的蓝牙列表
+    private ArrayList<BluetoothBean> mBlueConnectList;
+    private BluetoothConnectAdapter mConnectAdapter;
+    // 未连接的蓝牙列表
+    private ArrayList<BluetoothBean> mBlueNotConnectList;
+    private BluetoothNotConnectAdapter mNotConnectAdapter;
+
+    // 广播服务
+    private ChangePageReceiver receiver; // 注册广播接收器
+    private Handler mHandler;
+
+    private BluetoothSetPopupwindow mPopupwindow;
+    private boolean isConnectClick = false; // 是否是主动连接或断开蓝牙
+
+    // 蓝牙工具类
+    private BluetoothManagerUtil mBluetoothManagerUtil;
+    private BluetoothUpgradeVersionBean mVersionBean; // 蓝牙版本信息
+    private String mUpgrade_number = ""; // 待更新的蓝牙名称
+    private String mUpgrade_type = ""; // 待更新的蓝牙型号
+    private String mUpgrade_version = ""; //
+
+    // 蓝牙升级包截取位置
+    private int mUpgradeSubstringNumber = ((1024 * 12 + 24) + 1024 * 4 * 2 - 24) * 2;
+    // 升级包的内容，十六进制字符串
+    private String mUpgradeContent;
+    // 项目ID
+    private String mProject_id;
+    // 芯片ID
+    private String mChip_id;
+    // 固件ID
+    private String mFirmware_id;
+    // 传输进度弹窗
+    private UpgradeProgressDialog mProgressDialog;
+    // 计算当前传输进度
+    private int mAllTotal = 0; // 总大小
+    private int mSendTotal = 0; // 当前发送大小
+    private double mProgress = 0; // 当前进度
+    private String blue_version = ""; // 服务器返回的最新 蓝牙固件版本号
+    private boolean blue_newest_version = false;// 蓝牙固件是否是最新版本
+
+    public static Intent newInstance() {
+        return new Intent(MyApplication.getMyApp(), ConnectDeviceActivity.class);
+    }
+
+    @Override
+    public void setupActivityComponent(@NonNull AppComponent appComponent) {
+        DaggerConnectDeviceComponent.builder()
+                .appComponent(appComponent)
+                .view(this)
+                .build()
+                .inject(this);
+    }
+
+    @Override
+    public int initView(@Nullable Bundle savedInstanceState) {
+        return R.layout.activity_connect_device;//setContentView(id);
+    }
+
+    @Override
+    public void initData(@Nullable Bundle savedInstanceState) {
+        setTitle(getString(R.string.device));
+        mBleDeviceList = new ArrayList<>();
+        mBluetoothModels = new ArrayList<>();
+        mBlueConnectList = new ArrayList<>();
+        mBlueNotConnectList = new ArrayList<>();
+        mHandler = new Handler();
+        if (MyApplication.getMyApp().getBleDeviceList() != null) {
+            mBleDeviceList.addAll(MyApplication.getMyApp().getBleDeviceList());
+        }
+
+        try {
+            mBluetoothBeanDao = new MyDao(BluetoothModel.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        getBluetoothListForDB();
+
+        rvConnect.setLayoutManager(new LinearLayoutManager(this));
+        rvNotConnect.setLayoutManager(new LinearLayoutManager(this));
+
+        mConnectAdapter = new BluetoothConnectAdapter(R.layout.item_bluetooth_connect, mBlueConnectList);
+        rvConnect.setAdapter(mConnectAdapter);
+        mConnectAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (Utils.isButtonQuickClick()) {
+                    onBluetoothSetPopupWindow(view, position);
+                }
+            }
+        });
+
+        mNotConnectAdapter = new BluetoothNotConnectAdapter(R.layout.item_bluetooth, mBlueNotConnectList);
+        rvNotConnect.setAdapter(mNotConnectAdapter);
+        mNotConnectAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (Utils.isButtonQuickClick()) {
+                    onSubmitBleDeviceConnect(position);
+                }
+            }
+        });
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onBlueDeviceScreen();
+            }
+        }, 500);
+
+        // 获取蓝牙工具类对象
+        mBluetoothManagerUtil = BluetoothManagerUtil.getInstance();
+
+        // 注册一个广播接收器，用于接收从首页跳转到报警消息页面的广播
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("ble_device_list");
+        receiver = new ChangePageReceiver();
+        //注册切换页面广播接收者
+        LocalBroadcastManager.getInstance(MyApplication.getMyApp()).registerReceiver(receiver, filter);
+    }
+
+    /**
+     * 页面切换广播，广播接收器
+     */
+    private class ChangePageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent != null) {
+                // 0：连接失败，1：连接成功，2：扫描到设备，3：查询蓝牙升级版本，4：设备回复可以接收蓝牙升级，5：手机蓝牙关闭  6: 蓝牙升级中断后，返回续传包的序号（类似于断点续传）
+                int type = intent.getIntExtra("type", 0);
+                if (type == 3) {
+                    String receive = intent.getStringExtra("receive");
+                    onBluetoothUpgradeParse(receive);
+                } else if (type == 4) {
+                    onShowProgress();
+                } else if (type == 5) {
+                    mBlueConnectList.clear();
+                    mConnectAdapter.notifyDataSetChanged();
+                    mBlueNotConnectList.clear();
+                    mNotConnectAdapter.notifyDataSetChanged();
+                } else if (type == 6) {
+                    String receive = intent.getStringExtra("receive");
+                    onBluetoothPackageIndexParse(receive);
+                } else {
+                    BleDevice device = intent.getParcelableExtra("device");
+                    switch (type) {
+                        case 0:
+                            onConnectFail(device);
+                            break;
+                        case 1:
+                            isConnectClick = false;
+                            onConnectSuccess(device);
+                            break;
+                        case 2:
+                            onBluetoothDeviceShow(device);
+                            mConnectAdapter.notifyDataSetChanged();
+                            mNotConnectAdapter.notifyDataSetChanged();
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 蓝牙升级中断后，返回续传包的序号（类似于断点续传）
+     *
+     * @param receive 返回指令结果 7e0313 03 051160003540 00 0001 1e7e
+     */
+    public void onBluetoothPackageIndexParse(String receive) {
+        if (TextUtils.isEmpty(receive) && receive.length() != 30) {
+            return;
+        }
+        String indexValue = receive.substring(22, 26);
+        int index = BluetoothUtils.onTypeConversion_4(indexValue); //获取需要重新下载的包序号
+        if (index < dataIndexTotal) {
+            if (mHandler != null) {
+                mHandler.removeCallbacksAndMessages(null);
+                packageIndex = index - 1; //发送的时候默认加1，故重设时需要-1
+                onSendUpgradeContent();
+            }
+        }
+    }
+
+    /**
+     * 开始筛选显示扫描到的蓝牙列表
+     */
+    private void onBlueDeviceScreen() {
+        for (int i = 0; i < mBleDeviceList.size(); i++) {
+            onBluetoothDeviceShow(mBleDeviceList.get(i));
+        }
+        try {
+            Thread.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        mConnectAdapter.notifyDataSetChanged();
+        mNotConnectAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 从数据库查询已配对过的蓝牙设备列表
+     */
+    private void getBluetoothListForDB() {
+        mBluetoothModels.clear();
+        if (getBluetoothListDataBase() != null) {
+            mBluetoothModels.addAll(getBluetoothListDataBase());
+        }
+    }
+
+    /**
+     * 从数据库get数据-蓝牙设备列表
+     *
+     * @return
+     */
+    private List<BluetoothModel> getBluetoothListDataBase() {
+        try {
+            Map<String, String> map1 = new HashMap<>();
+            map1.put(BluetoothModel.ACCOUNT, ConstantValue.getAccount());
+            return (List<BluetoothModel>) mBluetoothBeanDao.query(mBluetoothBeanDao.queryBuilder(map1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 已连接的设备操作功能：断开连接 or 蓝牙升级
+     *
+     * @param position
+     */
+    private void onBluetoothSetPopupWindow(View view, int position) {
+        if (mPopupwindow != null && mPopupwindow.isShowing()) {
+            mPopupwindow.dismiss();
+        } else {
+            mPopupwindow = new BluetoothSetPopupwindow(this);
+            mPopupwindow.setBluetoothSetChange(new BluetoothSetPopupwindow.onBluetoothSetChange() {
+                @Override
+                public void onBluetoothDisConnect() {
+//                    if (Utils.isButtonQuickClick())
+                    {
+                        onDisConnectConfirm(position);
+                    }
+                }
+
+                @Override
+                public void onFirmwareUpgrade() {
+//                    if (Utils.isButtonQuickClick())
+                    {
+                        if (position >= mBlueConnectList.size()) {
+                            return;
+                        }
+                        BluetoothBean bluetoothBean = mBlueConnectList.get(position);
+                        // 截取设备号
+                        String device_number = bluetoothBean.getName().replace(BluetoothManagerUtil.BLUE_NAME_START, "");
+                        mBluetoothManagerUtil.onCheckBluetoothUpgrade(device_number, "04");
+                    }
+                }
+            });
+            mPopupwindow.showAsDropDown(view, 0, -((int) (view.getHeight() * 2.7)));
+        }
+    }
+
+    /**
+     * 单个设备扫描之后处理
+     *
+     * @param device
+     */
+    private void onBluetoothDeviceShow(BleDevice device) {
+        if (device == null) {
+            return;
+        }
+        boolean isDevice = false; // 设备是否在2个列表中
+        for (int i = 0; i < mBlueConnectList.size(); i++) {
+            BluetoothBean bean = mBlueConnectList.get(i);
+            if (device.getMac().equals(bean.getMac())) {
+                isDevice = true;
+                break;
+            }
+        }
+        for (int i = 0; i < mBlueNotConnectList.size(); i++) {
+            BluetoothBean bean = mBlueNotConnectList.get(i);
+            if (device.getMac().equals(bean.getMac())) {
+                isDevice = true;
+                break;
+            }
+        }
+
+        BluetoothBean bean = new BluetoothBean();
+        bean.setName(device.getName());
+        bean.setMac(device.getMac());
+        if (!isDevice) {
+            if (isConnected(device)) {
+                mBlueConnectList.add(bean);
+            } else {
+                if (mBluetoothModels.size() > 0) {
+                    boolean isPair = false;
+                    for (BluetoothModel model : mBluetoothModels) {
+                        if (model.getMac().equals(device.getMac())) {
+                            isPair = true;
+                            break;
+                        }
+                    }
+                    bean.setPair(isPair);
+                } else {
+                    bean.setPair(false);
+                }
+                bean.setConnect(false);
+                if (device.getName() != null && !isHasBleDevice(device.getName())) {
+                    mBlueNotConnectList.add(bean);
+                }
+            }
+        }
+    }
+
+    /**
+     * 判断列表里面是否已经有这个设备了，避免重复添加
+     *
+     * @param name
+     * @return
+     */
+    private boolean isHasBleDevice(String name) {
+        boolean isHas = false;
+        for (BluetoothBean bean : mBlueConnectList) {
+            if (bean != null && name.equals(bean.getName())) {
+                isHas = true;
+                break;
+            }
+        }
+        for (BluetoothBean bean : mBlueNotConnectList) {
+            if (bean != null && name.equals(bean.getName())) {
+                isHas = true;
+                break;
+            }
+        }
+        return isHas;
+    }
+
+    /**
+     * 发起蓝牙连接请求
+     *
+     * @param position
+     */
+    private void onSubmitBleDeviceConnect(int position) {
+        BluetoothBean bluetoothBean = mBlueNotConnectList.get(position);
+        BleDevice bleDevice = null;
+        for (BleDevice device : mBleDeviceList) {
+            if (device == null) {
+                continue;
+            }
+            if (device.getMac().equals(bluetoothBean.getMac())) {
+                bleDevice = device;
+                break;
+            }
+        }
+
+        if (bleDevice != null) {
+            for (BluetoothBean bean : mBlueNotConnectList) {
+                if (bluetoothBean.getMac().equals(bean.getMac())) {
+                    bean.setConnect(true);
+                    break;
+                }
+            }
+            isConnectClick = true;
+            mNotConnectAdapter.notifyDataSetChanged();
+            BroadcastReceiverUtil.onDeviceOperate(ConnectDeviceActivity.this, 2, 1, "", 1, bleDevice);
+        } else {
+            isConnectClick = false;
+            ToastUtils.show(getString(R.string.bluetooth_connect_error));
+        }
+    }
+
+    /**
+     * 取消配对蓝牙确认提示
+     *
+     * @param position
+     */
+    private void onDisConnectConfirm(int position) {
+        BlueDisconnectDialog dialog = new BlueDisconnectDialog();
+        dialog.show(getSupportFragmentManager(), getString(R.string.bluetooth_disconnect_hint), new BlueDisconnectDialog.onBlueDisconnectChange() {
+            @Override
+            public void onBlueDisconnect() {
+                onSubmitBleDeviceDisConnect(position);
+            }
+        });
+    }
+
+    /**
+     * 蓝牙升级
+     *
+     * @param
+     */
+    private void onCheckBluetoothUpgrade(String device_number, String current_version) {
+        BlueDisconnectDialog dialog = new BlueDisconnectDialog();
+        String tipText = getString(R.string.txt_current_version) + current_version + "\n" + getString(R.string.upgrade_hint);
+        dialog.show(getSupportFragmentManager(), tipText, new BlueDisconnectDialog.onBlueDisconnectChange() {
+            @Override
+            public void onBlueDisconnect() {
+                mBluetoothManagerUtil.onCheckBluetoothUpgrade(device_number, "03");
+            }
+        });
+    }
+
+    /**
+     * 断开蓝牙连接
+     *
+     * @param position
+     */
+    private void onSubmitBleDeviceDisConnect(int position) {
+        if (position >= mBlueConnectList.size()) {
+            return;
+        }
+        BluetoothBean bluetoothBean = mBlueConnectList.get(position);
+        BleDevice bleDevice = null;
+        for (BleDevice device : mBleDeviceList) {
+            if (device == null) {
+                continue;
+            }
+            if (device.getMac().equals(bluetoothBean.getMac())) {
+                bleDevice = device;
+                break;
+            }
+        }
+
+        if (bleDevice != null) {
+            mBlueConnectList.remove(bluetoothBean);
+            bluetoothBean.setPair(true);
+            bluetoothBean.setConnect(false);
+            mBlueNotConnectList.add(bluetoothBean);
+            mConnectAdapter.notifyDataSetChanged();
+            mNotConnectAdapter.notifyDataSetChanged();
+
+            BroadcastReceiverUtil.onDeviceOperate(ConnectDeviceActivity.this, 2, 1, "", 2, bleDevice);
+        }
+    }
+
+    /**
+     * 连接失败
+     * 1.判断设备是否是已连接了的设备
+     * 2.判断设备是否是未连接的设备，是正在发起连接请求的设备
+     * 3.如果条件1,2都不满足，说明是新扫描到的设备，走扫描添加设备的逻辑
+     *
+     * @param device
+     */
+    private void onConnectFail(BleDevice device) {
+        if (device == null) {
+            return;
+        }
+        BluetoothBean connectBean = null;
+        for (BluetoothBean bean : mBlueConnectList) {
+            if (device.getMac().equals(bean.getMac())) {
+                connectBean = bean;
+                break;
+            }
+        }
+        if (connectBean != null) {
+            mBlueConnectList.remove(connectBean);
+            connectBean.setPair(true);
+            connectBean.setConnect(false);
+            mBlueNotConnectList.add(connectBean);
+        } else {
+            for (BluetoothBean bean : mBlueNotConnectList) {
+                if (device.getMac().equals(bean.getMac())) {
+                    bean.setConnect(false);
+                    connectBean = bean;
+                    break;
+                }
+            }
+            if (connectBean == null) {
+                onBluetoothDeviceShow(device);
+            }
+        }
+        mConnectAdapter.notifyDataSetChanged();
+        mNotConnectAdapter.notifyDataSetChanged();
+//        if (isConnectClick) {
+//            ToastUtils.show(getString(R.string.bluetooth_connect_error));
+//        }
+        isConnectClick = false;
+
+        if (!TextUtils.isEmpty(mUpgrade_number)) {
+            if (device.getName().contains(mUpgrade_number)) {
+                if (mProgressDialog != null && mProgressDialog.isAdded()) {
+                    mProgressDialog.dismissAllowingStateLoss();
+                }
+                mProgressDialog = null;
+                if (!blue_newest_version) {
+                    ToastUtils.show(getString(R.string.upgrade_error));
+                }
+                onResetUpgradeValue();
+            }
+        }
+    }
+
+    /**
+     * 连接成功
+     * 1.判断设备是否是未连接的设备，正在发起连接请求
+     * 2.判断是否是已连接的设备断开了，正在发起重连请求
+     * 3.条件1,2都不满足，说明是新扫描到的设备，添加到列表当中
+     *
+     * @param device
+     */
+    private void onConnectSuccess(BleDevice device) {
+        if (device == null) {
+            return;
+        }
+        BluetoothBean connectBean = null;
+        for (BluetoothBean bean : mBlueNotConnectList) {
+            if (device.getMac().equals(bean.getMac())) {
+                connectBean = bean;
+                break;
+            }
+        }
+        if (connectBean != null) {
+            mBlueNotConnectList.remove(connectBean);
+            if (isConnected(device)) {
+                mBlueConnectList.add(connectBean);
+            }
+        } else {
+            for (BluetoothBean bean : mBlueConnectList) {
+                if (device.getMac().equals(bean.getMac())) {
+                    connectBean = bean;
+                    break;
+                }
+            }
+            if (connectBean == null) {
+                connectBean = new BluetoothBean();
+                connectBean.setName(device.getName());
+                connectBean.setMac(device.getMac());
+                if (isConnected(device)) {
+                    mBlueConnectList.add(connectBean);
+                }
+            }
+        }
+        mConnectAdapter.notifyDataSetChanged();
+        mNotConnectAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 判断设备是否已连接
+     *
+     * @param bleDevice
+     * @return
+     */
+    private boolean isConnected(BleDevice bleDevice) {
+        if (bleDevice == null) {
+            return false;
+        } else {
+            return BleManager.getInstance().isConnected(bleDevice);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        mHandler.removeCallbacksAndMessages(null);
+        mHandler = null;
+        LocalBroadcastManager.getInstance(MyApplication.getMyApp()).unregisterReceiver(receiver);
+        super.onDestroy();
+    }
+
+    @Override
+    public void showMessage(@NonNull String message) {
+        checkNotNull(message);
+        ArmsUtils.snackbarText(message);
+    }
+
+    @Override
+    public void launchActivity(@NonNull Intent intent) {
+        checkNotNull(intent);
+        ArmsUtils.startActivity(intent);
+    }
+
+    @Override
+    public void killMyself() {
+        finish();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
+    // --------------------------------------- 蓝牙升级 -------------------------------------
+
+    /**
+     * 解析蓝牙升级数据，看是需要升级还是上报升级信息给服务器
+     *
+     * @param receive 返回指令结果 7e03060f 051160000369 00 4d33315f56312e35e80301000100937e
+     */
+    public void onBluetoothUpgradeParse(String receive) {
+        LogUtils.e("onBluetoothUpgradeParse=" + receive);
+        if (TextUtils.isEmpty(receive)) {
+            mBluetoothManagerUtil.onCheckBluetoothUpgrade(mUpgrade_number, "00");
+            return;
+        }
+        //0、获取消息body // 包含消息头，消息体， 不包含校验位
+        String strResult = receive.substring(8, receive.length() - 4);
+        // 主机设备名称
+        String upgrade_number = strResult.substring(1, 12);
+        // 升级结果：成功还是失败
+        String upgrade_result = strResult.substring(12, 14);
+        // 版本内容，设备型号_当前版本
+        String version_info = strResult.substring(14, 30);
+        // 项目ID
+        mProject_id = strResult.substring(30, 34);
+        // 芯片ID
+        mChip_id = strResult.substring(34, 38);
+        // 固件ID
+        mFirmware_id = strResult.substring(38);
+
+        String version = StringToSixthUtils.decode(version_info);
+        blue_version = ""; // 升级版本置空
+        if (!TextUtils.isEmpty(upgrade_result)) {
+            switch (upgrade_result) {
+                case "00":
+                    getBluetoothVersion(upgrade_number, version);
+                    break;
+                case "02":
+                    submitUpgradeResult(upgrade_result);
+                    ToastUtils.show(getString(R.string.upgrade_success));
+                    break;
+                case "03":
+                    submitUpgradeResult(upgrade_result);
+                    ToastUtils.show(getString(R.string.upgrade_fail));
+                    break;
+                case "04": //查询版本
+                    onCheckBluetoothUpgrade(upgrade_number, version);
+                    break;
+
+            }
+        }
+    }
+
+    /**
+     * 向服务器获取版本，看看是否有新的版本需要升级
+     *
+     * @param device_number
+     * @param version_info
+     */
+    private void getBluetoothVersion(String device_number, String version_info) {
+        // M31_V0.0
+        String[] version = version_info.split("_");
+        if (version.length == 2) {
+            mUpgrade_number = device_number;
+            mUpgrade_type = version[0];
+            mUpgrade_version = version[1];
+            String url = ConstantValue.getBluetoothUpgradeVersion(mUpgrade_number, mUpgrade_type, version_info);
+            if (getPresenter() != null) {
+                getPresenter().getBluetoothUpgradeVersion(url);
+            }
+        }
+    }
+
+    /**
+     * 上报蓝牙升级结果
+     *
+     * @param result 02升级完成成功（不需要回复）  03升级完成失败
+     */
+    private void submitUpgradeResult(String result) {
+        if (mVersionBean != null) {
+            // 更新成功传0， 更新失败传1
+            int upgrade_rst = 0;
+            if (result.equals("03")) {
+                upgrade_rst = 1;
+            }
+            String url = ConstantValue.submitReportUpgradeRst(mUpgrade_number, mVersionBean.getData().getTask_id(),
+                    mVersionBean.getData().getUpgrade_type(), upgrade_rst, mVersionBean.getData().getDst_version());
+            if (getPresenter() != null) {
+                getPresenter().submitUpgradeResult(url);
+            }
+        }
+    }
+
+    @Override
+    public void getBluetoothUpgradeVersionSuccess(BluetoothUpgradeVersionBean bluetoothUpgradeVersionBean) {
+        mUpgradeContent = "";
+        blue_newest_version = false;
+        if (bluetoothUpgradeVersionBean.getErrcode() == 0) {
+            mVersionBean = bluetoothUpgradeVersionBean;
+            blue_version = bluetoothUpgradeVersionBean.getData().getDst_version();
+            if (bluetoothUpgradeVersionBean.getData().getFlag() != 0) {
+                if (!TextUtils.isEmpty(blue_version)) {
+                    String path = FileUtilApp.getSDPath(MyApplication.getMyApp()) + FileUtilApp.FileDownLoad + blue_version + Api.Bluetooth_bin;
+                    File dirFile = new File(path);
+                    if (dirFile.exists()) {
+                        // 已存在升级包
+                        onStartBluetoothUpgrade(path);
+                    } else {
+                        // 未存在升级包
+                        onDownloadVersionFile(blue_version, bluetoothUpgradeVersionBean.getData().getUrl());
+                    }
+
+                } else {
+                    onNotUpgradeVersion();
+                }
+            } else {
+                onNotUpgradeVersion();
+            }
+        } else {
+            ToastUtils.show(bluetoothUpgradeVersionBean.getMsg());
+        }
+    }
+
+    /**
+     * 当前版本已经是最新版本
+     */
+    private void onNotUpgradeVersion() {
+        mBluetoothManagerUtil.onCheckBluetoothUpgrade(mUpgrade_number, "00");
+        blue_newest_version = true;
+        ToastUtils.show(getString(R.string.latest_version));
+    }
+
+    /**
+     * 开始下载升级文件
+     *
+     * @param dst_version 文件版本
+     * @param url         下载地址
+     */
+    private void onDownloadVersionFile(String dst_version, String url) {
+        BluetoothUpgradeDownloadDialog dialog = new BluetoothUpgradeDownloadDialog();
+        dialog.show(getSupportFragmentManager(), url, dst_version + Api.Bluetooth_bin, new BluetoothUpgradeDownloadDialog.onBluetoothUpgradeChange() {
+            @Override
+            public void onDownLoadAccept(String path) {
+                onStartBluetoothUpgrade(path);
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+    }
+
+    /**
+     * 开始传输蓝牙升级数据
+     *
+     * @param path 升级文件本地地址
+     */
+    private void onStartBluetoothUpgrade(String path) {
+        try {
+            byte[] version = BluetoothUtils.readStream(path);
+            mUpgradeContent = BluetoothUtils.bytesToHexString(version).substring(mUpgradeSubstringNumber);
+            if (!TextUtils.isEmpty(mUpgradeContent)) {
+                mBluetoothManagerUtil.onCheckBluetoothUpgrade(mUpgrade_number, "02");
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        onSendUpgradeLength();
+                    }
+                }, 500);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int dataIndexTotal = 0; //总包个数
+
+    /**
+     * 开始下发0101指令，下发
+     */
+    private void onSendUpgradeLength() {
+        // 特殊协议 0101 （APP到主 回复主机通用答应）
+        //协议头(2字节0101)+协议长度((2字节1A00)+固定字(2字节0500)+ 标签签名(4字节 01000000)+ (项目ID (2字节)+ 芯片ID (2字节)
+        // + 固件ID (2字节)从0306协议获取  应该是不会变的)+ 0100(序列号 不重要)
+        // +数据总长度(4字节 bin的大小) 计算总总内容长度，2位=1字节，计算完成之后，补足4字节，不足的后面补0，字节倒序上传
+        // +数据校验(4字节 bin的校验)  转成byte字节数组，逐位相加，得出总大小，计算完之后，补足4字节，不足的后面补0，字节倒序上传
+        // +头文件校验(4字节 01000000)
+
+        // 计算数据总长度
+        int dataLength = mUpgradeContent.length() / 2;
+        String sendDataLength = BluetoothUtils.onCalculateResult(dataLength);// 倒序数据总长度
+        // 计算数据校验
+        String dataCheckTotal = BluetoothUtils.makeChecksum(mUpgradeContent);
+
+        dataIndexTotal = dataLength / 150; //总包个数
+        int dataIndexLeave = dataLength % 150; //取余，剩余多少
+        if (dataIndexLeave != 0) {
+            dataIndexTotal += 1;
+        }
+
+        String strDataLength = BluetoothUtils.onCalculateResult2(dataIndexTotal + 1); //总包个数+1 并转16进制,倒序上传
+        if (!TextUtils.isEmpty(blue_version)) {
+            String gbHex = BluetoothUtils.toGBHex(blue_version); //版本号转16进制
+            String length = BluetoothUtils.onTypeConversion_3(26 + gbHex.length() / 2);//字节长度 例如：2200
+            // 完整指令
+            String value = "0101" + length + "00" + strDataLength + "01000000" + mProject_id + mChip_id + mFirmware_id + "0100" + sendDataLength + dataCheckTotal + "01000000" + gbHex;
+
+            LogUtils.e("value=" + value);
+            mBluetoothManagerUtil.onSendUpgradeMessage(value, mUpgrade_number);
+        }
+
+    }
+
+    private void onShowProgress() {
+        if (mProgressDialog != null && mProgressDialog.isAdded()) {
+            mProgressDialog.dismissAllowingStateLoss();
+            mProgressDialog = null;
+        }
+        mAllTotal = mUpgradeContent.length();
+        mProgress = 0;
+        mSendTotal = 0;
+        mProgressDialog = new UpgradeProgressDialog();
+        mProgressDialog.show(getSupportFragmentManager());
+        onSendUpgradeContent();
+    }
+
+    private int packageIndex = 0; //包序号下标
+
+    /**
+     * 发送升级包
+     */
+    private void onSendUpgradeContent() {
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ++packageIndex;
+                onSendValue();
+            }
+        }, 150);
+    }
+
+    /**
+     * 开始传输蓝牙协议
+     */
+    private void onSendValue() {
+        if (packageIndex != dataIndexTotal + 1 && mUpgradeContent.length() > 0) { //总包个数时
+            String content = "";
+            //最后一个包的index  dataIndexTotal - 1
+            if (packageIndex == dataIndexTotal) { //总包-1，最后一个包
+                content = mUpgradeContent.substring((packageIndex - 1) * 300);
+            } else {
+                if(mUpgradeContent.length() >= packageIndex * 300) {
+                    content = mUpgradeContent.substring((packageIndex - 1) * 300, packageIndex * 300);
+                }
+            }
+            mBluetoothManagerUtil.onSendUpgradeContent(content, mUpgrade_number, packageIndex);
+            if (mProgressDialog != null && mProgressDialog.isAdded()) {
+                if (packageIndex == dataIndexTotal) { //总包-1，最后一个包
+                    mProgressDialog.setUpgradeProgress(100);
+                } else {
+                    mSendTotal = packageIndex * 300;
+                    mProgress = (double) (mSendTotal * 100 / mAllTotal);
+                    mProgressDialog.setUpgradeProgress((int) mProgress);
+                }
+            }
+
+            onSendUpgradeContent();
+        } else {
+            mBluetoothManagerUtil.onSendUpgradeMessage("0301010000", mUpgrade_number);
+            if (mProgressDialog != null && mProgressDialog.isAdded()) {
+                mProgressDialog.dismissAllowingStateLoss();
+            }
+            mProgressDialog = null;
+            onResetUpgradeValue();
+            if (mHandler != null) {
+                mHandler.removeCallbacksAndMessages(null);
+            }
+        }
+    }
+
+    /**
+     * 重置升级参数
+     */
+    private void onResetUpgradeValue() {
+        mUpgradeContent = "";
+        mUpgrade_number = "";
+        mUpgrade_type = "";
+        mUpgrade_version = "";
+        mVersionBean = null;
+        packageIndex = 0;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mBluetoothManagerUtil.startBluetoothService();
+
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (MyApplication.getMyApp().getBleDeviceList() != null) {
+                    mBlueConnectList.clear();
+                    mBlueNotConnectList.clear();
+                    mBleDeviceList.clear();
+                    mBleDeviceList.addAll(MyApplication.getMyApp().getBleDeviceList());
+                }
+                onBlueDeviceScreen();
+            }
+        }, 1000);
+
+    }
+}

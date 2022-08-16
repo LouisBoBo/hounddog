@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/dp_12"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_333333"
+            android:text="@string/map_name"/>
+
+        <EditText
+            android:id="@+id/edt_map_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:background="@color/transparent"
+            android:gravity="end|center_vertical"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_333333"
+            android:textColorHint="@color/color_999999"
+            android:hint="@string/map_name_hint"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_E5E5E5"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp_12"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_333333"
+            android:text="@string/current_range"/>
+
+        <TextView
+            android:id="@+id/tv_map_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/dp_6"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:textColor="@color/color_333333"
+            android:textSize="@dimen/sp_14"
+            tools:text="90KB" />
+
+        <TextView
+            android:id="@+id/tv_map_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/tv_map_size"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_3"
+            android:textSize="@dimen/sp_12"
+            android:textColor="@color/color_999999"
+            tools:text="5瓦片"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_E5E5E5"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp_12"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_333333"
+            android:text="@string/map_clarity"/>
+
+        <LinearLayout
+            android:layout_width="@dimen/dp_150"
+            android:layout_height="@dimen/dp_32"
+            android:orientation="horizontal"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_12">
+
+            <TextView
+                android:id="@+id/tv_map_flow"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="@dimen/sp_13"
+                android:textColor="@color/color_FFFFFF"
+                android:background="@drawable/bg_00c8f8_fillet_4_left"
+                android:text="@string/save_traffic"/>
+
+            <TextView
+                android:id="@+id/tv_map_sd"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="@dimen/sp_13"
+                android:textColor="@color/color_00C8F8"
+                android:background="@drawable/bg_ffffff_00c8f8_4"
+                android:text="@string/sd"/>
+
+            <TextView
+                android:id="@+id/tv_map_hd"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="@dimen/sp_13"
+                android:textColor="@color/color_00C8F8"
+                android:background="@drawable/bg_ffffff_fillet_00c8f8_4_right"
+                android:text="@string/hd"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_E5E5E5"/>
+
+    <Button
+        android:id="@+id/btn_start_download"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_7"
+        android:layout_marginBottom="@dimen/dp_7"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:background="@drawable/bg_00c8f8_fillet_6"
+        android:textSize="@dimen/sp_15"
+        android:textColor="@color/color_FFFFFF"
+        android:text="@string/start_download"/>
+
+</LinearLayout>

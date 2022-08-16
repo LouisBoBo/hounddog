@@ -1,0 +1,19 @@
+{
+  "buildFiles": [
+    "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/build/cmake/android.toolchain.cmake",
+    "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/CMakeLists.txt"
+  ],
+  "cleanCommands": [
+    "/Users/lixiang/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -C \"/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/debug/armeabi-v7a\" clean"
+  ],
+  "buildTargetsCommand": "/Users/lixiang/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja  -C \"/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/debug/armeabi-v7a\" {LIST_OF_TARGETS_TO_BUILD}",
+  "libraries": {
+    "webrtc_ns-Debug-armeabi-v7a": {
+      "artifactName": "webrtc_ns",
+      "buildCommand": "/Users/lixiang/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja -C \"/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/debug/armeabi-v7a\" webrtc_ns",
+      "abi": "armeabi-v7a",
+      "output": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/build/intermediates/cmake/debug/obj/armeabi-v7a/libwebrtc_ns.so",
+      "runtimeFiles": []
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "stringTable": {
+    "0": "G:/KyWork/Android/hounddog/webrtc_ns/.cxx/cmake/debug/armeabi",
+    "1": "--target=armv5te-none-linux-androideabi --gcc-toolchain=D:/Android/AndroidSDK/android-ndk-r16b/toolchains/arm-linux-androideabi-4.9/prebuilt/windows-x86_64 --sysroot=D:/Android/AndroidSDK/android-ndk-r16b/sysroot -Dwebrtc_ns_EXPORTS -I../../../../src/main/include -isystem D:/Android/AndroidSDK/android-ndk-r16b/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=19 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv5te -mtune=xscale -msoft-float -fno-integrated-as -mthumb -Wa,--noexecstack -Wformat -Werror=format-security -O0 -fno-limit-debug-info -fPIC"
+  },
+  "buildFiles": [
+    "D:\\Android\\AndroidSDK\\android-ndk-r16b\\build\\cmake\\android.toolchain.cmake",
+    "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\CMakeLists.txt"
+  ],
+  "cleanCommands": [
+    "D:\\Android\\AndroidSDK\\sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx\\cmake\\debug\\armeabi\" clean"
+  ],
+  "buildTargetsCommand": "D:\\Android\\AndroidSDK\\sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe  -C \"G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx\\cmake\\debug\\armeabi\" {LIST_OF_TARGETS_TO_BUILD}",
+  "libraries": {
+    "webrtc_ns-Debug-armeabi": {
+      "buildCommand": "D:\\Android\\AndroidSDK\\sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx\\cmake\\debug\\armeabi\" webrtc_ns",
+      "buildType": "debug",
+      "toolchain": "1953290022",
+      "abi": "armeabi",
+      "artifactName": "webrtc_ns",
+      "files": [
+        {
+          "src": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\src\\main\\cpp\\noise_suppression.c",
+          "flagsOrdinal": 1,
+          "workingDirectoryOrdinal": 0
+        },
+        {
+          "src": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\src\\main\\cpp\\noise_suppression_jni.c",
+          "flagsOrdinal": 1,
+          "workingDirectoryOrdinal": 0
+        }
+      ],
+      "headers": [],
+      "output": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\build\\intermediates\\cmake\\debug\\obj\\armeabi\\libwebrtc_ns.so",
+      "runtimeFiles": []
+    }
+  },
+  "toolchains": {
+    "1953290022": {
+      "cCompilerExecutable": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang.exe"
+    }
+  },
+  "cFileExtensions": [
+    "c"
+  ],
+  "cppFileExtensions": []
+}

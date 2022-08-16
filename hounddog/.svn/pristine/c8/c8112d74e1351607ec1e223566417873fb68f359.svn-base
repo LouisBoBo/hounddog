@@ -1,0 +1,7 @@
+Executable : D:\Android\AndroidSDK\sdk\cmake\3.10.2.4988404\bin\ninja.exe
+arguments : 
+-C
+G:\KyWork\Android\hounddog\webrtc_ns\.cxx\cmake\release\arm64-v8a
+webrtc_ns
+jvmArgs : 
+

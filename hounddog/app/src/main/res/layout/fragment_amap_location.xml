@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/drawerlayout"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.amap.api.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <include layout="@layout/layout_device_power_state"/>
+
+        <include layout="@layout/layout_device_info"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="@dimen/dp_250"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="end"
+        android:background="@color/color_FFFFFF">
+
+        <include layout="@layout/layout_map_drawer_info"/>
+    </LinearLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginStart="@dimen/dp_12"
+    android:layout_marginEnd="@dimen/dp_12"
+    android:layout_marginTop="@dimen/dp_8"
+    android:layout_marginBottom="@dimen/dp_10"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="@dimen/dp_9"
+    app:cardElevation="@dimen/dp_5"
+    tools:ignore="UnusedAttribute">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_17"
+            android:layout_marginStart="@dimen/dp_17"
+            android:layout_marginEnd="@dimen/dp_17"
+            android:textSize="@dimen/sp_13"
+            android:textColor="@color/color_5D5D5D"
+            android:text="@string/account"/>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_12"
+            android:layout_marginStart="@dimen/dp_17"
+            android:layout_marginEnd="@dimen/dp_17"
+            android:textSize="@dimen/sp_13"
+            android:textColor="@color/color_5D5D5D"
+            android:text="@string/name"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_12"
+            android:layout_marginStart="@dimen/dp_17"
+            android:layout_marginEnd="@dimen/dp_17"
+            android:textSize="@dimen/sp_13"
+            android:textColor="@color/color_5D5D5D"
+            android:text="@string/time"/>
+
+        <TextView
+            android:id="@+id/tv_remark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_12"
+            android:layout_marginStart="@dimen/dp_17"
+            android:layout_marginEnd="@dimen/dp_17"
+            android:layout_marginBottom="@dimen/dp_17"
+            android:textSize="@dimen/sp_13"
+            android:textStyle="bold"
+            android:textColor="@color/color_00C8F8"
+            android:text="@string/remark"/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

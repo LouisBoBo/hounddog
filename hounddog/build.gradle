@@ -1,0 +1,72 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply from: "config.gradle"
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+        // 配置HMS Core SDK的Maven仓地址。
+        maven { url 'https://developer.huawei.com/repo/' }
+        maven { url 'https://repo1.maven.org/maven2/' }
+        maven {
+            url "http://mvn.mob.com/android"
+        }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.0.1'
+        //Gradle Android Maven plugin
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        //Gradle Bintray Plugin
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
+        // 增加agcp插件配置。
+        classpath 'com.huawei.agconnect:agcp:1.6.4.300'
+        // mob分享
+        classpath "com.mob.sdk:MobSDK:+"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven { url 'https://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url "https://jitpack.io" }
+        flatDir {
+            dir 'libs'
+        }
+        // 配置HMS Core SDK的Maven仓地址。
+        maven { url 'https://developer.huawei.com/repo/' }
+        maven { url 'https://repo1.maven.org/maven2/' }
+    }
+}
+
+ext {
+    //百度API
+    BAIDU_API_KEY = "YXPM0S2ce8Mh2N8b314bNf9Qo6xxV5Ej"
+
+    //高德API
+    AMAP_API_KEY = "37104ef9061a38736b1bcdd582687190"
+
+    //谷歌API
+    GOOGLE_API_KEY = "AIzaSyAY5qs7LRLoItgmd3yLuLQMjYAleOn6MQA"
+
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency { details ->
+            // Force all of the primary libraries to use the same version.
+            if (details.requested.name == 'appcompat'
+                    && details.requested.name == 'annotation'
+                    && details.requested.name == 'recyclerview') {
+                details.useVersion rootProject.ext.version["androidXSdkVersion"]
+            }
+        }
+    }
+}

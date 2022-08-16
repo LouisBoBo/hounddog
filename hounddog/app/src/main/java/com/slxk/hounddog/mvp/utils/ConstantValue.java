@@ -1,0 +1,439 @@
+package com.slxk.hounddog.mvp.utils;
+
+import android.text.TextUtils;
+
+import com.blankj.utilcode.util.SPUtils;
+import com.slxk.hounddog.mvp.model.api.Api;
+
+/**
+ * 全局常量
+ * Created by Administrator on 2019\5\9 0009.
+ */
+
+public class ConstantValue {
+
+    public final static String VERSION_CODE = "versionCode"; // 第一次进入app标识，空的标识第一次进入app
+    public static final String Is_Get_Update_App = "is_get_update_app"; // 是否已经请求过版本更新接口了，请求过了就不再请求
+    public final static String IS_AGREE_PRIVACY = "is_agree_privacy"; // 是否同意用户隐私协议弹窗，false：不同意，true：同意
+    public final static String ACCOUNT = "account"; // 登录的账号或者设备号(String)
+    public final static String PASSWORD = "password"; // 登录的密码(String)
+    public final static String IS_SAVE_PASSWORD = "is_save_password"; // 是否保存密码(boolean)
+    public final static String Family_Sid = "family_sid"; // 当前用户的组织id，默认为当前用户的(String)
+    public final static String Family_Sid_Login = "family_sid_login"; // 登录获取的组织id，默认为当前用户的(String)
+    public final static String Family_Sname = "family_name"; // 当前用户的组织的名称
+    public final static String Family_Sname_Login = "family_name_login"; // 登录获取的组织的名称
+    public final static String Family_Auth = "family_auth"; // 权限列表， 格式化的json字符串
+    public final static String Is_Need_Check = "is_need_check"; // 是否需要检查资料.true需要，表示未绑定手机号码，false不需要
+    public final static String Is_Modify_Password = "is_modify_password"; // 未绑定手机号用户，是否需要修改密码 boolean
+    public final static String Is_Bind_Mobile = "is_bind_mobile"; // 是否需要绑定手机号码 boolean
+    public final static String Is_Foreign_Device = "isForeignDevice"; // 是否是国外的设备号，国外的设备不需要绑定手机号
+    public final static String Push_Switch = "push_switch"; // 此用户是否需要推送用户推送标志,true代表开 false代表关
+    public final static String Push_Family = "push_family"; // 返回对应的组织id，用于绑定推送family_(familyid号)，如果是设备号登录,则绑定dev_(imei号)
+    public final static String IS_USER_AGREEMENT = "is_user_agreement"; // 登录即同意用户隐私协议，false：不同意，true：同意
+    public final static String Is_Auth_agree = "is_auth_agree"; // 是否授予手机授权，boolean
+    public final static String Phone_Zone = "phone_zone"; // 如果是手机号绑定登录，返回手机号的区号 (int)
+    public final static String Compass_View_All = "compass_view_all"; // 罗盘界面，view_all按钮是否全部打开
+
+    public final static String USER_SID = "user_sid"; // 会话id(String)
+    public final static String MAP_TYPE = "map_type"; // 地图类型，0：高德地图，1：百度地图，2：谷歌地图(int)
+    public final static String USER_LOGIN_TYPE = "user_login_type"; // 用户登录类型，e_account_login 或 e_device_login
+    public final static String APP_Location_Mode = "app_location_mode"; // 使用的定位模式，0:无线模式，1:网络模式
+
+    public final static String Record_Last_Time = "record_last_time"; // 获取实时录音数据时使用，开始时间-startTime传值(long)
+    public final static String Record_Before_Time = "record_before_time"; // 获取历史录音数据时使用，结束时间-endTime传值(long)
+
+    public final static String APP_Service_Ip = "app_service_ip"; // 手动输入的域名
+    public static final String ACTIVITY_STATUS = "activity_status"; // 是否处于地图页，true  or  false，用于下发点名模式指令(后台切换前台运行)
+    public final static String Is_Refresh_Group_Data = "isRefreshGroup"; // 是否刷新首页分组数据
+
+    public final static String Is_Main_Guide = "is_main_guide"; // 是否已显示过首页操作指引
+    public final static String Is_First_Guide = "is_first_guide"; // 是否已显示过引导页
+    public final static String Is_In_China = "is_in_china"; // 是否在中国
+    public final static String Is_Map_SatelliteMap = "is_map_satelliteMap"; // 是否是卫星地图(boolean)
+    public final static String Google_Map_Is_In_China = "google_map_in_china"; // 原生谷歌地图，定位是否在中国
+    public final static String Function_Temperature_Humidity = "temperature_humidity"; // 是否支持温湿度功能（boolean）
+
+    public final static String Is_Request_Authority = "is_request_authority"; // 是否请求了用户手机权限，每次打开APP只请求一次
+    public final static String Push_mpm = "push_mpm"; // 推送类型
+    public final static String HUAWEI_TOKEN = "huawei_token"; // 华为token
+
+    public final static String Is_No_More_Reminders = "is_no_more_reminders"; // 是否不再弹出合并账号提示
+
+    public final static String Is_Check_Phone = "is_check_phone"; // 是否绑定手机号的账户,用来判断个人中心的修改手机号，解绑手机号是否显示,不做其他用途
+
+    public final static String Language_Nation = "language_nation"; // 多语言，已下载的国家语言
+    public final static String Language_Version = "language_version"; // 多语言，已下载的版本
+
+    public final static String Umeng_Init = "umeng_init"; // 友盟是否同意隐私政策，true or false
+
+    /**
+     * 是否同意了隐私政策
+     * @return
+     */
+    public static boolean isAgreePrivacy(){
+        return SPUtils.getInstance().getBoolean(IS_AGREE_PRIVACY);
+    }
+
+    /**
+     * 获取友盟隐私政策是否同意了
+     * @return
+     */
+    public static boolean getUmengInit(){
+        return SPUtils.getInstance().getBoolean(Umeng_Init, false);
+    }
+
+    /**
+     * APP当前使用的定位模式，0:无线模式，1:网络模式
+     * @return
+     */
+    public static int getAppLocationMode(){
+        return SPUtils.getInstance().getInt(APP_Location_Mode, 0);
+    }
+
+    /**
+     * 罗盘全部显示按钮设置值
+     * @return
+     */
+    public static boolean getCompassViewAll(){
+        return SPUtils.getInstance().getBoolean(Compass_View_All, true);
+    }
+
+    /**
+     * 多语言，已下载的国家语言
+     * @return
+     */
+    public static String getLanguageNation(){
+        return SPUtils.getInstance().getString(Language_Nation);
+    }
+
+    /**
+     * 多语言，已下载的版本
+     * @return
+     */
+    public static int getLanguageVersion(){
+        return SPUtils.getInstance().getInt(Language_Version, 0);
+    }
+
+    /**
+     * 获取推送类型
+     * @return
+     */
+    public static String getPushMpm(){
+        return SPUtils.getInstance().getString(Push_mpm, ResultDataUtils.Push_XiaoMi);
+    }
+
+    /**
+     * 是否请求了用户手机权限
+     * @return
+     */
+    public static boolean isRequestAuthority(){
+        return SPUtils.getInstance().getBoolean(Is_Request_Authority, false);
+    }
+
+    /**
+     * 是否支持温湿度功能
+     * @return
+     */
+    public static boolean isTemperatureHumidity(){
+        return SPUtils.getInstance().getBoolean(Function_Temperature_Humidity, false);
+    }
+
+    /**
+     * 是否是卫星地图
+     * @return
+     */
+    public static boolean isMapSatelliteMap(){
+        return SPUtils.getInstance().getBoolean(Is_Map_SatelliteMap, true);
+    }
+
+    /**
+     * 原生谷歌地图，定位是否在中国
+     * @return
+     */
+    public static boolean isGoogleMapIsInChina(){
+        return SPUtils.getInstance().getBoolean(Google_Map_Is_In_China, false);
+    }
+
+    /**
+     * 是否在中国
+     * @return
+     */
+    public static boolean isInChina(){
+        return SPUtils.getInstance().getBoolean(Is_In_China, true);
+    }
+
+    /**
+     * 是否已显示过首页操作指引
+     * @return
+     */
+    public static boolean isMainGuide(){
+        return SPUtils.getInstance().getBoolean(Is_Main_Guide, false);
+    }
+
+    /**
+     * 是否已显示过引导页
+     * @return
+     */
+    public static boolean isFirstGuide(){
+        return SPUtils.getInstance().getBoolean(Is_First_Guide, false);
+    }
+
+    /**
+     * 当前界面是否处于地图页
+     * @return
+     */
+    public static boolean isActivityStatus(){
+        return SPUtils.getInstance().getBoolean(ACTIVITY_STATUS, false);
+    }
+
+    /**
+     * 是否刷新首页分组数据
+     * @return
+     */
+    public static boolean isRefreshGroupData(){
+        return SPUtils.getInstance().getBoolean(Is_Refresh_Group_Data, false);
+    }
+
+    /**
+     * 获取用户权限
+     * @return
+     */
+    public static String getFamilyAuth(){
+        return SPUtils.getInstance().getString(Family_Auth, "");
+    }
+
+    /**
+     * 是否登录
+     * @return
+     */
+    public static boolean isLogin(){
+        return !TextUtils.isEmpty(SPUtils.getInstance().getString(USER_SID));
+    }
+
+    /**
+     * 获取推送开关状态
+     * @return
+     */
+    public static boolean isPushSwitch(){
+        return SPUtils.getInstance().getBoolean(Push_Switch, true);
+    }
+
+    /**
+     * 获取推送绑定的推送id
+     * @return
+     */
+    public static String getPushFamily(){
+        return SPUtils.getInstance().getString(Push_Family);
+    }
+
+    /**
+     * 是否保存密码
+     * @return
+     */
+    public static boolean isSavePassword() {
+        return SPUtils.getInstance().getBoolean(IS_SAVE_PASSWORD, false);
+    }
+
+    /**
+     * 获取sid参数，拼接在接口地址url后面
+     * @return
+     */
+    public static String getApiUrlSid(){
+        return SPUtils.getInstance().getString(USER_SID, "");
+    }
+
+    /**
+     * 获取登录账号
+     * @return
+     */
+    public static String getAccount(){
+        return SPUtils.getInstance().getString(ACCOUNT, "");
+    }
+
+    /**
+     * 获取登录密码
+     * @return
+     */
+    public static String getPassword(){
+        return SPUtils.getInstance().getString(PASSWORD, "");
+    }
+
+    /**
+     * 获取登录账号类型
+     * @return
+     */
+    public static String getAccountType(){
+        return SPUtils.getInstance().getString(USER_LOGIN_TYPE, "");
+    }
+
+    /**
+     * 获取登录的地图类型
+     * @return
+     */
+    public static int getMapType(){
+        return SPUtils.getInstance().getInt(MAP_TYPE, 2);
+    }
+
+    /**
+     * 获取登录的family_id
+     * @return
+     */
+    public static String getFamilySid(){
+        return SPUtils.getInstance().getString(Family_Sid, "");
+    }
+
+    /**
+     * 获取登录的family_Sname
+     * @return
+     */
+    public static String getFamilySName(){
+        return SPUtils.getInstance().getString(Family_Sname, "");
+    }
+
+    /**
+     * 是否需要检查资料.true需要，表示未绑定手机号码，false不需要
+     * @return
+     */
+    public static boolean isNeedCheck(){
+        return SPUtils.getInstance().getBoolean(Is_Need_Check, false);
+    }
+
+    /**
+     * 是否绑定手机号的账户,用来判断个人中心的修改手机号，解绑手机号是否显示,不做其他用途
+     * @return
+     */
+    public static boolean isCheckPhone(){
+        return SPUtils.getInstance().getBoolean(Is_Check_Phone, false);
+    }
+
+    /**
+     * 是否是绑定手机的账号或者设备号登录
+     * @return
+     */
+    public static boolean isLoginForBindMobile(){
+        boolean isBindMobile = false;
+        if (getAccountType().equals(ResultDataUtils.Login_type_Phone_Device)
+                || getAccountType().equals(ResultDataUtils.Login_type_Phone_Account)){
+            isBindMobile = true;
+        }
+        return isBindMobile;
+    }
+
+    /**
+     * 是否是账号登录
+     * @return
+     */
+    public static boolean isAccountLogin(){
+        boolean isAccount = false;
+        if (getAccountType().equals(ResultDataUtils.Login_type_Account)
+                || getAccountType().equals(ResultDataUtils.Login_type_Phone_Account)){
+            isAccount = true;
+        }
+        return isAccount;
+    }
+
+    /**
+     * 是否不再弹出合并账号提示
+     * @return
+     */
+    public static boolean isNoMoreReminders(){
+        return SPUtils.getInstance().getBoolean(Is_No_More_Reminders, false);
+    }
+
+    /**
+     * 获取手动输入的ip
+     * @param isRelease 是否是生产服
+     * @return
+     */
+    public static String getAPPServiceIp(boolean isRelease){
+        String serviceIp = SPUtils.getInstance().getString(APP_Service_Ip, "");
+        if (!TextUtils.isEmpty(serviceIp)){
+            if (!serviceIp.contains("http://") && !serviceIp.contains("https://")){
+                serviceIp = "http://" + serviceIp;
+            }
+        }
+        if (TextUtils.isEmpty(serviceIp)){
+            return isRelease ? "http://cx.52zdx.com" : "http://csapp.cciot.cc"; // API域名
+        }else{
+            serviceIp = Utils.replaceBlank(serviceIp);
+            return serviceIp.trim();
+        }
+    }
+
+    /**
+     * 获取充值需要的参数 - sim卡充值
+     * @param iccid         设备的iccid
+     * @return
+     */
+    public static String getPaySimRechargeValue(String simei,String iccid) {
+        if (getFamilySid() != null && getFamilySid().length() > 0) {
+            return "?sid=" + SPUtils.getInstance().getString(USER_SID) + "&simei=" + simei + "&iccid=" + iccid + "&appName=" + Api.App_Recharge_Name
+                    + "&host=" + getAPPServiceIp(Api.isRelease) + "&sfamilyid=" + getFamilySid();
+        } else {
+            return "?sid=" + SPUtils.getInstance().getString(USER_SID) + "&simei=" + simei  + "&iccid=" + iccid + "&appName=" + Api.App_Recharge_Name
+                    + "&host=" + getAPPServiceIp(Api.isRelease);
+        }
+    }
+
+    /**
+     * 获取充值需要的参数 - 增值服务充值
+     * @param rtype 取值为GetRecordConfig接口的type字段
+     * @return
+     */
+    public static String getPayRecordRechargeValue(String simei, String imei, int rtype){
+        return "?sid=" + SPUtils.getInstance().getString(USER_SID) + "&simei=" + simei + "&imei="
+                + imei + "&rtype=" + rtype;
+    }
+
+    /**
+     * 温湿度折线图
+     * @param simei
+     * @param name 设备名称
+     * @return
+     */
+    public static String getTemperatureAndHumidity(String simei, String name){
+        return "?sid=" + SPUtils.getInstance().getString(USER_SID) + "&simei=" + simei + "&name="
+                + name + "&appName=yjzx";
+    }
+
+    /**
+     * 获取帮助中心url地址
+     * @return
+     */
+    public static String getHelpCenterUrl(){
+        return Api.Help_Center + "?lang=" + Utils.getLocaleLanguageShorthand();
+    }
+
+    /**
+     * 向服务器获取蓝牙升级版本
+     * @param imei 待查询设备号
+     * @param device_type_name 设备型号
+     * @param curr_version 当前版本
+     * @return
+     */
+    public static String getBluetoothUpgradeVersion(String imei, String device_type_name, String curr_version){
+        return Api.Bluetooth_Upgrade
+                + "?imei=" + imei
+                + "&device_type_name=" + device_type_name
+                + "&curr_version=" + curr_version;
+    }
+
+    /**
+     * 上报蓝牙升级结果
+     * @param imei 待上报设备号
+     * @param task_id 升级任务id
+     * @param upgrade_type 升级方式 0:差分 1:整包
+     * @param upgrade_rst 升级结果，更新成功传0， 更新失败传1
+     * @param version 更新后的版本号
+     * @return
+     */
+    public static String submitReportUpgradeRst(String imei, int task_id, int upgrade_type, int upgrade_rst, String version){
+        return Api.Bluetooth_Report_Upgrade_Rst
+                + "?imei=" + imei
+                + "&task_id=" + task_id
+                + "&upgrade_type=" + upgrade_type
+                + "&upgrade_rst=" + upgrade_rst
+                + "&version=" + version;
+    }
+
+}

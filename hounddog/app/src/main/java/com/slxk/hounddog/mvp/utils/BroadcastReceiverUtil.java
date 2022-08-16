@@ -1,0 +1,116 @@
+package com.slxk.hounddog.mvp.utils;
+
+import android.content.Context;
+import android.content.Intent;
+
+import com.clj.fastble.data.BleDevice;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+/**
+ * 广播工具类
+ */
+public class BroadcastReceiverUtil {
+
+    /**
+     * 显示首页某个模块，请求某个功能
+     *
+     * @param context
+     * @param page    功能类型
+     */
+    public static void showMainPage(Context context, int page) {
+        Intent intent = new Intent();
+        intent.setAction("main");
+        intent.putExtra("page", page);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    /**
+     * 设备列表界面，重新查询设备列表
+     *
+     * @param context
+     */
+    public static void showDeviceList(Context context) {
+        Intent intent = new Intent();
+        intent.setAction("device_list");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    /**
+     * 删除，添加设备，通知地图页进行操作
+     *
+     * @param context
+     * @param intent_type 发送指令类型，0：切换页面，1：删除，添加设备，2：蓝牙列表操作，3：选中设备
+     * @param type 操作类型，0：删除设备，1：添加设备
+     * @param imei 设备imei号，可以为空
+     * @param ble_type 蓝牙操作类型，1：蓝牙配对，2：蓝牙断开，默认为0
+     * @param device 蓝牙设备
+     */
+    public static void onDeviceOperate(Context context, int intent_type, int type, String imei, int ble_type, BleDevice device) {
+        Intent intent = new Intent();
+        intent.setAction("location_map");
+        intent.putExtra("intent_type", intent_type);
+        intent.putExtra("type", type);
+        intent.putExtra("imei", imei);
+        intent.putExtra("ble_type", ble_type);
+        intent.putExtra("device", device);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    /**
+     * 罗盘列表界面，重新查询设备列表
+     *
+     * @param context
+     * @param position 切换的fragment索引位置
+     */
+    public static void showCompassDeviceList(Context context, int position) {
+        Intent intent = new Intent();
+        intent.setAction("compass_list");
+        intent.putExtra("position", position);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    /**
+     * 定位页不可见的时候，发送广播，停止循环刷新设备数据
+     *
+     * @param context
+     * @param intent_type 发送指令类型，0：切换页面，1：删除，添加设备
+     * @param type 类型，后续扩展
+     */
+    public static void onDeviceDetailRunStop(Context context, int intent_type, int type) {
+        Intent intent = new Intent();
+        intent.setAction("location_map");
+        intent.putExtra("intent_type", intent_type);
+        intent.putExtra("type", type);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    /**
+     * 蓝牙设备列表，连接蓝牙操作
+     * @param context
+     * @param type 0：连接失败，1：连接成功，2：扫描到设备
+     */
+    public static void onBleDeviceState(Context context, int type, BleDevice device){
+        Intent intent = new Intent();
+        intent.setAction("ble_device_list");
+        intent.putExtra("type", type);
+        intent.putExtra("device", device);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    /**
+     * 蓝牙升级，版本查询
+     * @param context
+     * @param type 0：连接失败，1：连接成功，2：扫描到设备，3：查询蓝牙固件升级，4：开始传输蓝牙升级包
+     * @param receive 返回指令
+     */
+    public static void onBleDeviceUpgrade(Context context, int type, String receive, BleDevice device){
+        Intent intent = new Intent();
+        intent.setAction("ble_device_list");
+        intent.putExtra("type", type);
+        intent.putExtra("receive", receive);
+        intent.putExtra("device", device);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+}

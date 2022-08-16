@@ -1,0 +1,19 @@
+{
+  "buildFiles": [
+    "D:\\Android\\AndroidSDK\\android-ndk-r16b\\build\\cmake\\android.toolchain.cmake",
+    "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\CMakeLists.txt"
+  ],
+  "cleanCommands": [
+    "D:\\Android\\AndroidSDK\\sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx\\cmake\\debug\\armeabi\" clean"
+  ],
+  "buildTargetsCommand": "D:\\Android\\AndroidSDK\\sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe  -C \"G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx\\cmake\\debug\\armeabi\" {LIST_OF_TARGETS_TO_BUILD}",
+  "libraries": {
+    "webrtc_ns-Debug-armeabi": {
+      "artifactName": "webrtc_ns",
+      "buildCommand": "D:\\Android\\AndroidSDK\\sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx\\cmake\\debug\\armeabi\" webrtc_ns",
+      "abi": "armeabi",
+      "output": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\build\\intermediates\\cmake\\debug\\obj\\armeabi\\libwebrtc_ns.so",
+      "runtimeFiles": []
+    }
+  }
+}

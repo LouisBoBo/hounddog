@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_35"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@color/color_FFFFFF">
+
+        <TextView
+            android:id="@+id/tv_before_day"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableStart="@drawable/icon_left"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_4D4D4D"
+            android:gravity="center_vertical"
+            android:text="@string/before_day"
+            android:drawablePadding="@dimen/dp_5"
+            tools:ignore="UseCompatTextViewDrawableXml" />
+
+        <LinearLayout
+            android:id="@+id/ll_data"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginStart="@dimen/dp_40"
+            android:layout_marginEnd="@dimen/dp_40">
+
+            <ImageView
+                android:layout_width="@dimen/dp_11"
+                android:layout_height="@dimen/dp_11"
+                android:src="@drawable/icon_data"/>
+
+            <TextView
+                android:id="@+id/tv_data"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginStart="@dimen/dp_10"
+                android:textSize="@dimen/sp_14"
+                android:textColor="@color/color_00C8F8"
+                tools:text="2020-01-08"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_after_day"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableEnd="@drawable/icon_right"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_4D4D4D"
+            android:gravity="center_vertical"
+            android:text="@string/after_day"
+            android:drawablePadding="@dimen/dp_5"
+            tools:ignore="UseCompatTextViewDrawableXml" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:layout_marginBottom="@dimen/dp_100">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_clear_track"
+            android:layout_width="@dimen/dp_46"
+            android:layout_height="@dimen/dp_46"
+            app:cardCornerRadius="@dimen/dp_6"
+            android:layout_marginBottom="@dimen/dp_15">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/iv_clear_track"
+                    android:layout_width="@dimen/dp_35"
+                    android:layout_height="@dimen/dp_17"
+                    android:src="@drawable/icon_clear_track"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp_10"
+                    android:textColor="@color/color_333333"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:text="@string/clear_track"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_base_station_switch"
+            android:layout_width="@dimen/dp_46"
+            android:layout_height="@dimen/dp_46"
+            app:cardCornerRadius="@dimen/dp_6">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/iv_base_station_switch"
+                    android:layout_width="@dimen/dp_35"
+                    android:layout_height="@dimen/dp_17"
+                    android:src="@drawable/icon_switch_off_two"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp_10"
+                    android:textColor="@color/color_333333"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:text="@string/base_station_switch"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+</RelativeLayout>

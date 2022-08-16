@@ -1,0 +1,2 @@
+ninja: Entering directory `/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/debug/arm64-v8a'
+ninja: no work to do.

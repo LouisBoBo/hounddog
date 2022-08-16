@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_zone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_14"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/color_333333"
+        android:layout_margin="@dimen/dp_14"
+        tools:text="86"/>
+
+    <TextView
+        android:id="@+id/tv_country"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_14"
+        android:textColor="@color/color_333333"
+        android:layout_margin="@dimen/dp_14"
+        android:layout_toStartOf="@+id/tv_zone"
+        tools:text="中国"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/tv_country"
+        android:background="@color/color_E5E5E5"/>
+
+</RelativeLayout>

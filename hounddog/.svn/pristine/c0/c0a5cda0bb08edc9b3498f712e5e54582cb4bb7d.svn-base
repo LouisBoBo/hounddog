@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/color_F4F4F4">
+
+    <include layout="@layout/include_title"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_13"
+        android:textColor="@color/color_666666"
+        android:layout_marginTop="@dimen/dp_33"
+        android:layout_marginStart="@dimen/dp_12"
+        android:text="@string/device_name"/>
+
+    <EditText
+        android:id="@+id/edt_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:paddingStart="@dimen/dp_12"
+        android:paddingEnd="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/color_FFFFFF"
+        android:textSize="@dimen/sp_13"
+        android:textColor="@color/color_333333"
+        android:textColorHint="@color/color_999999"
+        android:hint="@string/inout_device_name"/>
+
+    <Button
+        android:id="@+id/btn_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:background="@drawable/bg_00c8f8_fillet_6"
+        android:gravity="center"
+        android:textSize="@dimen/sp_16"
+        android:textColor="@color/color_FFFFFF"
+        android:text="@string/confirm"/>
+
+</LinearLayout>

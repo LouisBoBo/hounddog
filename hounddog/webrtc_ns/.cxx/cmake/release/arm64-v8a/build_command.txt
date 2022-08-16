@@ -1,0 +1,24 @@
+Executable : /Users/lixiang/Library/Android/sdk/cmake/3.10.2.4988404/bin/cmake
+arguments : 
+-H/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns
+-DCMAKE_CXX_FLAGS=-frtti -fexceptions
+-DCMAKE_FIND_ROOT_PATH=/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/release/prefab/arm64-v8a/prefab
+-DCMAKE_BUILD_TYPE=Release
+-DCMAKE_TOOLCHAIN_FILE=/Users/lixiang/Library/Android/ndk/android-ndk-r16b/build/cmake/android.toolchain.cmake
+-DANDROID_ABI=arm64-v8a
+-DANDROID_NDK=/Users/lixiang/Library/Android/ndk/android-ndk-r16b
+-DANDROID_PLATFORM=android-21
+-DCMAKE_ANDROID_ARCH_ABI=arm64-v8a
+-DCMAKE_ANDROID_NDK=/Users/lixiang/Library/Android/ndk/android-ndk-r16b
+-DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/build/intermediates/cmake/release/obj/arm64-v8a
+-DCMAKE_MAKE_PROGRAM=/Users/lixiang/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja
+-DCMAKE_SYSTEM_NAME=Android
+-DCMAKE_SYSTEM_VERSION=21
+-DANDROID_TOOLCHAIN=clang
+-DANDROID_STL=c++_static
+-B/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/release/arm64-v8a
+-GNinja
+jvmArgs : 
+
+Build command args:

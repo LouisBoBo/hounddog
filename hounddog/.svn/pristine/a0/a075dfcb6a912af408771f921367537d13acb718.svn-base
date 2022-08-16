@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.mcxtzhang.swipemenulib.SwipeMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_menu_layout">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:layout_marginStart="@dimen/dp_22"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_333333"
+            android:text="@string/offline_map"/>
+
+        <TextView
+            android:id="@+id/tv_map_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginStart="@dimen/dp_22"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_999999"
+            android:text="@string/map_google"/>
+
+        <TextView
+            android:id="@+id/tv_map_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name"
+            android:layout_toEndOf="@+id/tv_map_type"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginStart="@dimen/dp_22"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_999999"
+            tools:text="56kb"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_download_progress"
+            android:layout_width="@dimen/dp_28"
+            android:layout_height="@dimen/dp_28"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/dp_18"
+            android:layout_marginEnd="@dimen/dp_17">
+
+            <com.slxk.hounddog.mvp.ui.view.CircularProgressView
+                android:id="@+id/circular_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                app:backColor="@color/color_D7D7D7"
+                app:backWidth="@dimen/dp_2"
+                app:progColor="@color/color_00C8F8"
+                app:progWidth="@dimen/dp_2"
+                app:progress="0" />
+
+            <ImageView
+                android:id="@+id/iv_start"
+                android:layout_width="@dimen/dp_6"
+                android:layout_height="@dimen/dp_12"
+                android:layout_centerInParent="true"
+                android:src="@drawable/icon_download_map_start"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_download_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/rl_download_progress"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginEnd="@dimen/dp_22"
+            android:textSize="@dimen/sp_11"
+            android:textColor="@color/color_999999"
+            tools:text="0%"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tv_map_type"
+            android:background="@color/color_E5E5E5"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_delete"
+        android:layout_width="@dimen/dp_56"
+        android:layout_height="match_parent"
+        android:background="@color/color_FF5A5A"
+        android:textSize="@dimen/sp_14"
+        android:text="@string/delete"
+        android:textColor="@color/color_FFFFFF" />
+
+</com.mcxtzhang.swipemenulib.SwipeMenuLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_60"
+    android:background="@color/transparent"
+    android:padding="@dimen/dp_10">
+
+    <TextView
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="加载中"
+        android:textColor="@color/bg_black_40" />
+
+    <TextView
+        android:id="@+id/fail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="加载失败"
+        android:textColor="@color/bg_black_40" />
+
+    <TextView
+        android:id="@+id/nomore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/dp_10"
+        android:text="已无更多数据"
+        android:textColor="@color/bg_black_40" />
+
+</FrameLayout>

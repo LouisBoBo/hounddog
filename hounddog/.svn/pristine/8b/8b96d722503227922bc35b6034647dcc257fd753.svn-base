@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/transparent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_ffffff_fillet_00c8f8_4">
+
+        <TextView
+            android:id="@+id/tv_data_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:gravity="center"
+            android:text="@string/select_date"
+            android:textColor="@color/color_333333"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_select_prompt_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:gravity="center"
+            android:text="@string/select_date_prompt"
+            android:textColor="@color/color_777777"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/id_year"
+                    android:layout_width="@dimen/dp_80"
+                    android:layout_height="@dimen/dp_30"
+                    android:gravity="center"
+                    android:background="@drawable/bg_f0f0f0_fillet_6"
+                    tools:text="2012"
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/sp_16" />
+
+                <TextView
+                    android:id="@+id/tv_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:text="@string/year"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/id_month"
+                    android:layout_width="@dimen/dp_80"
+                    android:layout_height="@dimen/dp_30"
+                    android:gravity="center"
+                    android:background="@drawable/bg_f0f0f0_fillet_6"
+                    tools:text="12"
+                    android:textColor="@color/color_333333"
+                    android:textSize="@dimen/sp_16" />
+
+                <TextView
+                    android:id="@+id/tv_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/dp_10"
+                    android:text="@string/month"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.slxk.hounddog.mvp.ui.view.data.haibin.CalendarView
+            android:id="@+id/id_calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_2"
+            android:layout_marginEnd="@dimen/dp_2"
+            android:layout_marginTop="@dimen/dp_5"
+            android:background="@color/color_FFFFFF"
+            app:calendar_padding="@dimen/dp_10"
+            app:current_month_lunar_text_color="@color/color_000000"
+            app:current_month_text_color="@color/color_333333"
+            app:max_multi_select_size="7"
+            app:max_year="2050"
+            app:min_year="2020"
+            app:month_view="com.slxk.hounddog.mvp.ui.view.data.TrackCustomMultiMonthView"
+            app:month_view_show_mode="mode_only_current"
+            app:other_month_lunar_text_color="#e1e1e1"
+            app:other_month_text_color="#e1e1e1"
+            app:scheme_text="假"
+            app:scheme_text_color="#333"
+            app:scheme_theme_color="@color/color_00C8F8"
+            app:select_mode="multi_mode"
+            app:selected_lunar_text_color="#000"
+            app:selected_text_color="#000"
+            app:selected_theme_color="@color/color_00C8F8"
+            app:week_background="@color/color_FFFFFF"
+            app:week_start_with="sun"
+            app:week_text_color="@color/color_00C8F8"
+            app:week_view="com.slxk.hounddog.mvp.ui.view.data.CustomMultiWeekView"
+            app:week_view_scrollable="true"
+            app:year_view_day_text_color="#333333"
+            app:year_view_day_text_size="9sp"
+            app:year_view_month_text_color="#ff0000"
+            app:year_view_month_text_size="20sp"
+            app:year_view_scheme_color="#f17706" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_20">
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="@dimen/dp_40"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_ffffff_fillet_00c8f8_4"
+                android:textSize="@dimen/sp_16"
+                android:textColor="@color/color_00C8F8"
+                android:text="@string/cancel"/>
+
+            <Button
+                android:id="@+id/btn_confirm"
+                android:layout_width="@dimen/dp_100"
+                android:layout_height="@dimen/dp_40"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_00c8f8_4"
+                android:layout_marginStart="@dimen/dp_25"
+                android:textSize="@dimen/sp_16"
+                android:textColor="@color/color_FFFFFF"
+                android:text="@string/confirm"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"/>
+
+</LinearLayout>

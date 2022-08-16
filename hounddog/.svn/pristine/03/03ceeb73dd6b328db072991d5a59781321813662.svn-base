@@ -1,0 +1,124 @@
+package com.slxk.hounddog.mvp.model.bean;
+
+
+import com.slxk.hounddog.mvp.model.entity.BaseBean;
+import com.slxk.hounddog.mvp.utils.ResultDataUtils;
+
+import java.util.List;
+
+/**
+ * 设备列表
+ */
+public class DeviceListResultBean extends BaseBean {
+
+    /**
+     * is_all : false
+     * items : [{"car_image":738620139,"car_number":"4d7a0919-55cc-49c9-97a6-572d9fd3e2f8","imei":738620139,"last_pos":"bdd659c3-9b07-4547-955f-73b27f793d21","power":738620139,"service_ip":"86d6af8a-8965-4f2a-86ec-5d585392b596","simei":"7f350640-5ef8-4bce-b7fc-4f3c40cc2f14","state":"e_line_down|e_line_on|e_line_sleep"},{"car_image":738620139,"car_number":"c4c1f34a-10e2-4fb2-96e5-ab5d081918ab","imei":738620139,"last_pos":"44684a42-863f-4f86-9d9e-870d17f7bdd6","power":738620139,"service_ip":"387c1ce2-62d6-483b-86c5-a8fdf500c74f","simei":"0a210a84-9a7a-4af9-bd06-a3e1836bca2d","state":"e_line_down|e_line_on|e_line_sleep"}]
+     * errcode : 0
+     */
+
+    private boolean is_all; // 是否拉全了组织下的全部设备
+    private List<ItemsBean> items;
+
+    public boolean isIs_all() {
+        return is_all;
+    }
+
+    public void setIs_all(boolean is_all) {
+        this.is_all = is_all;
+    }
+
+    public List<ItemsBean> getItems() {
+        return items;
+    }
+
+    public void setItems(List<ItemsBean> items) {
+        this.items = items;
+    }
+
+    public static class ItemsBean {
+        /**
+         * car_image : 738620139
+         * car_number : 4d7a0919-55cc-49c9-97a6-572d9fd3e2f8
+         * imei : 738620139
+         * last_pos : bdd659c3-9b07-4547-955f-73b27f793d21
+         * power : 738620139
+         * service_ip : 86d6af8a-8965-4f2a-86ec-5d585392b596
+         * simei : 7f350640-5ef8-4bce-b7fc-4f3c40cc2f14
+         * state : e_line_down|e_line_on|e_line_sleep
+         */
+
+        private int car_image = 0; // 车辆图标id
+        private String car_number = ""; // 车牌号
+        private long imei; // 设备imei,仅用于展示
+        private String last_pos = ""; // 位置信息 json 格式如:{"direction":323,"lat":22642141,"lon":114034245,"ptype":"e_location_nomal","speed":0,"time":1610019370,"total_distance":12476629,"type":"e_static_gps"}
+        private int power = 0; // 电量
+        private String simei = ""; // 设备imei
+        private String state = ResultDataUtils.Device_State_Line_Down; // 设备状态，e_line_down|e_line_on|e_line_sleep，对应离线，在线，休眠
+        private String version; // 设备类型
+
+        public String getVersion() {
+            return version;
+        }
+
+        public void setVersion(String version) {
+            this.version = version;
+        }
+
+        public int getCar_image() {
+            return car_image;
+        }
+
+        public void setCar_image(int car_image) {
+            this.car_image = car_image;
+        }
+
+        public String getCar_number() {
+            return car_number;
+        }
+
+        public void setCar_number(String car_number) {
+            this.car_number = car_number;
+        }
+
+        public long getImei() {
+            return imei;
+        }
+
+        public void setImei(long imei) {
+            this.imei = imei;
+        }
+
+        public String getLast_pos() {
+            return last_pos;
+        }
+
+        public void setLast_pos(String last_pos) {
+            this.last_pos = last_pos;
+        }
+
+        public int getPower() {
+            return power;
+        }
+
+        public void setPower(int power) {
+            this.power = power;
+        }
+
+        public String getSimei() {
+            return simei;
+        }
+
+        public void setSimei(String simei) {
+            this.simei = simei;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public void setState(String state) {
+            this.state = state;
+        }
+    }
+}

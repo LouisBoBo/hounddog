@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/ll_not_offline_map"
+    tools:visibility="visible"
+    android:visibility="gone"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/iv_download"
+        android:layout_width="@dimen/dp_26"
+        android:layout_height="@dimen/dp_38"
+        android:src="@drawable/icon_download_map"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_26"
+        android:textSize="@dimen/sp_15"
+        android:textColor="@color/color_999999"
+        android:text="@string/not_download_offline_map"/>
+
+    <TextView
+        android:id="@+id/tv_download"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_13"
+        android:textSize="@dimen/sp_15"
+        android:textColor="@color/color_00C8F8"
+        android:text="@string/go_download"/>
+
+</LinearLayout>

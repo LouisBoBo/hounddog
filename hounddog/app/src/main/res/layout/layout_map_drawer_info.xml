@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_map_type_hint"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_28"
+        android:layout_marginTop="@dimen/dp_25"
+        android:background="@color/color_F4F4F4"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/dp_20"
+        android:text="@string/map_type"
+        android:textColor="@color/color_666666"
+        android:textSize="@dimen/sp_12"
+        tools:ignore="RtlSymmetry" />
+
+    <GridView
+        android:id="@+id/gridView_map_satellite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_25"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:listSelector="@color/transparent"
+        android:numColumns="2" />
+
+    <TextView
+        android:id="@+id/tv_map_select_hint"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_28"
+        android:layout_marginTop="@dimen/dp_25"
+        android:background="@color/color_F4F4F4"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/dp_20"
+        android:text="@string/map_select"
+        android:textColor="@color/color_666666"
+        android:textSize="@dimen/sp_12"
+        tools:ignore="RtlSymmetry" />
+
+    <GridView
+        android:id="@+id/gridView_map_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_25"
+        android:verticalSpacing="@dimen/dp_10"
+        android:listSelector="@color/transparent"
+        android:numColumns="3" />
+
+    <TextView
+        android:id="@+id/tv_other_hint"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_28"
+        android:layout_marginTop="@dimen/dp_25"
+        android:background="@color/color_F4F4F4"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/dp_20"
+        android:text="@string/other"
+        tools:visibility="visible"
+        android:visibility="gone"
+        android:textColor="@color/color_666666"
+        android:textSize="@dimen/sp_12"
+        tools:ignore="RtlSymmetry" />
+
+    <GridView
+        android:id="@+id/gridView_other"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_25"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:layout_marginBottom="@dimen/dp_25"
+        android:verticalSpacing="@dimen/dp_10"
+        android:listSelector="@color/transparent"
+        android:numColumns="3" />
+
+</LinearLayout>

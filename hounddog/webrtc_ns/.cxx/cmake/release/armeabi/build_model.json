@@ -1,0 +1,242 @@
+{
+  "abi": "ARMEABI",
+  "abiPlatformVersion": 19,
+  "buildSettings": {
+    "environmentVariables": []
+  },
+  "cmake": {
+    "cmakeArtifactsBaseFolder": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/release/armeabi",
+    "cmakeServerLogFile": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/release/armeabi/cmake_server_log.txt",
+    "cmakeWrappingBaseFolder": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cxx/release/armeabi",
+    "effectiveConfiguration": {
+      "name": "traditional-android-studio-cmake-environment",
+      "description": "Composite reified CMakeSettings configuration",
+      "generator": "Ninja",
+      "inheritEnvironments": [
+        "ndk"
+      ],
+      "buildRoot": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/release/armeabi",
+      "cmakeToolchain": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/build/cmake/android.toolchain.cmake",
+      "cmakeExecutable": "/Users/lixiang/Library/Android/sdk/cmake/3.10.2.4988404/bin/cmake",
+      "variables": [
+        {
+          "name": "CMAKE_CXX_FLAGS",
+          "value": "-frtti -fexceptions"
+        },
+        {
+          "name": "CMAKE_FIND_ROOT_PATH",
+          "value": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/release/prefab/armeabi/prefab"
+        },
+        {
+          "name": "CMAKE_BUILD_TYPE",
+          "value": "Release"
+        },
+        {
+          "name": "CMAKE_TOOLCHAIN_FILE",
+          "value": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/build/cmake/android.toolchain.cmake"
+        },
+        {
+          "name": "ANDROID_ABI",
+          "value": "armeabi"
+        },
+        {
+          "name": "ANDROID_NDK",
+          "value": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b"
+        },
+        {
+          "name": "ANDROID_PLATFORM",
+          "value": "android-19"
+        },
+        {
+          "name": "CMAKE_ANDROID_ARCH_ABI",
+          "value": "armeabi"
+        },
+        {
+          "name": "CMAKE_ANDROID_NDK",
+          "value": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b"
+        },
+        {
+          "name": "CMAKE_EXPORT_COMPILE_COMMANDS",
+          "value": "ON"
+        },
+        {
+          "name": "CMAKE_LIBRARY_OUTPUT_DIRECTORY",
+          "value": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/build/intermediates/cmake/release/obj/armeabi"
+        },
+        {
+          "name": "CMAKE_MAKE_PROGRAM",
+          "value": "/Users/lixiang/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja"
+        },
+        {
+          "name": "CMAKE_SYSTEM_NAME",
+          "value": "Android"
+        },
+        {
+          "name": "CMAKE_SYSTEM_VERSION",
+          "value": "19"
+        },
+        {
+          "name": "ANDROID_TOOLCHAIN",
+          "value": "clang"
+        },
+        {
+          "name": "ANDROID_STL",
+          "value": "c++_static"
+        }
+      ]
+    }
+  },
+  "cxxBuildFolder": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/release/armeabi",
+  "info": {
+    "abi": "ARMEABI",
+    "bitness": 32,
+    "deprecated": true,
+    "default": false
+  },
+  "originalCxxBuildFolder": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/release/armeabi",
+  "variant": {
+    "buildSystemArgumentList": [
+      "-DANDROID_TOOLCHAIN\u003dclang",
+      "-DANDROID_STL\u003dc++_static"
+    ],
+    "buildTargetSet": [],
+    "cFlagsList": [],
+    "cmakeSettingsConfiguration": "android-gradle-plugin-predetermined-name",
+    "cppFlagsList": [
+      "-frtti -fexceptions"
+    ],
+    "isDebuggableEnabled": false,
+    "module": {
+      "buildSystem": "CMAKE",
+      "cmake": {
+        "cmakeExe": "/Users/lixiang/Library/Android/sdk/cmake/3.10.2.4988404/bin/cmake",
+        "minimumCmakeVersion": "3.10.2",
+        "ninjaExe": "/Users/lixiang/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja"
+      },
+      "cmakeToolchainFile": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/build/cmake/android.toolchain.cmake",
+      "cxxFolder": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx",
+      "gradleModulePathName": ":webrtc_ns",
+      "intermediatesFolder": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/build/intermediates",
+      "makeFile": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/CMakeLists.txt",
+      "moduleBuildFile": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/build.gradle",
+      "moduleRootFolder": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns",
+      "ndkDefaultAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "ndkFolder": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b",
+      "ndkMetaAbiList": [
+        {
+          "abi": "ARMEABI",
+          "bitness": 32,
+          "deprecated": true,
+          "default": false
+        },
+        {
+          "abi": "ARMEABI_V7A",
+          "bitness": 32,
+          "deprecated": false,
+          "default": true
+        },
+        {
+          "abi": "ARM64_V8A",
+          "bitness": 64,
+          "deprecated": false,
+          "default": true
+        },
+        {
+          "abi": "MIPS",
+          "bitness": 32,
+          "deprecated": true,
+          "default": false
+        },
+        {
+          "abi": "MIPS64",
+          "bitness": 64,
+          "deprecated": true,
+          "default": false
+        },
+        {
+          "abi": "X86",
+          "bitness": 32,
+          "deprecated": false,
+          "default": true
+        },
+        {
+          "abi": "X86_64",
+          "bitness": 64,
+          "deprecated": false,
+          "default": true
+        }
+      ],
+      "ndkSupportedAbiList": [
+        "ARMEABI",
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "MIPS",
+        "MIPS64",
+        "X86",
+        "X86_64"
+      ],
+      "ndkDefaultStl": "GNUSTL_STATIC",
+      "ndkVersion": "16.1.4479499",
+      "project": {
+        "compilerSettingsCacheFolder": "/Users/lixiang/Desktop/信春项目/Android/hounddog/.cxx",
+        "cxxFolder": "/Users/lixiang/Desktop/信春项目/Android/hounddog/.cxx",
+        "isBuildOnlyTargetAbiEnabled": true,
+        "isCmakeBuildCohabitationEnabled": false,
+        "isNativeCompilerSettingsCacheEnabled": false,
+        "rootBuildGradleFolder": "/Users/lixiang/Desktop/信春项目/Android/hounddog",
+        "sdkFolder": "/Users/lixiang/Library/Android/sdk",
+        "isPrefabEnabled": false
+      },
+      "splitsAbiFilterSet": [],
+      "stlSharedObjectMap": {
+        "GNUSTL_SHARED": {
+          "ARMEABI": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi/libgnustl_shared.so",
+          "ARMEABI_V7A": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/libgnustl_shared.so",
+          "ARM64_V8A": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/gnu-libstdc++/4.9/libs/arm64-v8a/libgnustl_shared.so",
+          "MIPS": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/gnu-libstdc++/4.9/libs/mips/libgnustl_shared.so",
+          "MIPS64": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/gnu-libstdc++/4.9/libs/mips64/libgnustl_shared.so",
+          "X86": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/gnu-libstdc++/4.9/libs/x86/libgnustl_shared.so",
+          "X86_64": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/gnu-libstdc++/4.9/libs/x86_64/libgnustl_shared.so"
+        },
+        "GNUSTL_STATIC": {},
+        "LIBCXX_SHARED": {
+          "ARMEABI": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/llvm-libc++/libs/armeabi/libc++_shared.so",
+          "ARMEABI_V7A": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a/libc++_shared.so",
+          "ARM64_V8A": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/llvm-libc++/libs/arm64-v8a/libc++_shared.so",
+          "MIPS": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/llvm-libc++/libs/mips/libc++_shared.so",
+          "MIPS64": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/llvm-libc++/libs/mips64/libc++_shared.so",
+          "X86": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/llvm-libc++/libs/x86/libc++_shared.so",
+          "X86_64": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/llvm-libc++/libs/x86_64/libc++_shared.so"
+        },
+        "LIBCXX_STATIC": {},
+        "NONE": {},
+        "STLPORT_SHARED": {
+          "ARMEABI": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/stlport/libs/armeabi/libstlport_shared.so",
+          "ARMEABI_V7A": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/stlport/libs/armeabi-v7a/libstlport_shared.so",
+          "ARM64_V8A": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/stlport/libs/arm64-v8a/libstlport_shared.so",
+          "MIPS": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/stlport/libs/mips/libstlport_shared.so",
+          "MIPS64": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/stlport/libs/mips64/libstlport_shared.so",
+          "X86": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/stlport/libs/x86/libstlport_shared.so",
+          "X86_64": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sources/cxx-stl/stlport/libs/x86_64/libstlport_shared.so"
+        },
+        "STLPORT_STATIC": {},
+        "SYSTEM": {}
+      }
+    },
+    "objFolder": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/build/intermediates/cmake/release/obj",
+    "variantName": "release",
+    "validAbiList": [
+      "ARMEABI",
+      "ARMEABI_V7A",
+      "ARM64_V8A"
+    ],
+    "prefabDirectory": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/release/prefab",
+    "prefabPackageDirectoryList": []
+  },
+  "prefabFolder": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/release/prefab/armeabi"
+}

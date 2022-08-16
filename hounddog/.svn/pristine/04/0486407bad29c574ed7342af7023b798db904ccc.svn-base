@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:background="@drawable/bg_ffffff_fillet_6">
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_40"
+        android:layout_marginBottom="@dimen/dp_25"
+        android:textSize="@dimen/sp_16"
+        android:textColor="@color/color_333333"
+        android:text="@string/firmware_upgrade_download_hint"/>
+
+    <TextView
+        android:id="@+id/tv_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_40"
+        android:textSize="@dimen/sp_14"
+        android:textColor="@color/color_333333"
+        android:text="@string/download_progress"/>
+
+</LinearLayout>

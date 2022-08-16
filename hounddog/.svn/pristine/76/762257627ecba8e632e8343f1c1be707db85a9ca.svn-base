@@ -1,0 +1,376 @@
+package com.slxk.hounddog.mvp.ui.activity;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.MyLocationConfiguration;
+import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.model.LatLngBounds;
+import com.baidu.mapapi.utils.DistanceUtil;
+import com.jess.arms.base.BaseActivity;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.ArmsUtils;
+import com.slxk.hounddog.R;
+import com.slxk.hounddog.app.MyApplication;
+import com.slxk.hounddog.di.component.DaggerNavigationBaiduComponent;
+import com.slxk.hounddog.mvp.contract.NavigationBaiduContract;
+import com.slxk.hounddog.mvp.presenter.NavigationBaiduPresenter;
+import com.slxk.hounddog.mvp.utils.AddressParseUtil;
+import com.slxk.hounddog.mvp.utils.BitmapHelperBaidu;
+import com.slxk.hounddog.mvp.utils.ConstantValue;
+import com.slxk.hounddog.mvp.utils.MyOrientationListener;
+import com.slxk.hounddog.mvp.utils.Utils;
+import com.slxk.hounddog.mvp.weiget.NavigationDialog;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.jess.arms.utils.Preconditions.checkNotNull;
+
+
+/**
+ * ================================================
+ * Description:
+ * <p>
+ * Created by MVPArmsTemplate on 01/13/2022 11:38
+ * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
+ * <a href="https://github.com/JessYanCoding">Follow me</a>
+ * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
+ * <a href="https://github.com/JessYanCoding/MVPArms/wiki">See me</a>
+ * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
+ * ================================================
+ */
+public class NavigationBaiduActivity extends BaseActivity<NavigationBaiduPresenter> implements NavigationBaiduContract.View {
+
+    @BindView(R.id.mapView)
+    MapView mapView;
+    @BindView(R.id.iv_navigation)
+    ImageView ivNavigation;
+    @BindView(R.id.tv_distance)
+    TextView tvDistance;
+    @BindView(R.id.tv_address)
+    TextView tvAddress;
+    @BindView(R.id.tv_address_hint)
+    TextView tvAddressHint;
+
+    private long mDeviceLatitude = 0; // 设备纬度
+    private long mDeviceLongitude = 0; // 设备经度
+    private int mDeviceState = 2; // 设备状态
+    private static final String Intent_Lat_Key = "lat_key";
+    private static final String Intent_Lon_Key = "lon_key";
+    private static final String Intent_State_Key = "state_key";
+
+    private double mDeviceLat;
+    private double mDeviceLon;
+
+    private BaiduMap mBaiduMap;
+    private LocationClient mLocationClient;
+    private float mZoom = 15;
+    private LatLng userLocation;
+    private LatLng carLocation;
+
+    private MyLocationConfiguration.LocationMode mCurrentMode; // 定位模式 地图SDK支持三种定位模式：NORMAL（普通态）, FOLLOWING（跟随态）, COMPASS（罗盘态）
+    private static final int accuracyCircleFillColor = 0x00FF00FF; // 自定义精度圈填充颜色
+    private static final int accuracyCircleStrokeColor = 0x00FF00FF; // 自定义精度圈边框颜色
+    private BitmapHelperBaidu bitmapHelper;
+    private LatLngBounds.Builder mBuilder; // 所有设备可视化Builder
+
+    private MyOrientationListener myOrientationListener; // 手机传感器方向
+    private int mXDirection = 0;
+    private float mCurrentAccracy;
+    private double mLatitude = 0.0; // 定位获取到的纬度
+    private double mLongitude = 0.0; // 定位获取到的经度
+
+    public static Intent newInstance(long lat, long lon, int state) {
+        Intent intent = new Intent(MyApplication.getMyApp(), NavigationBaiduActivity.class);
+        intent.putExtra(Intent_Lat_Key, lat);
+        intent.putExtra(Intent_Lon_Key, lon);
+        intent.putExtra(Intent_State_Key, state);
+        return intent;
+    }
+
+    @Override
+    public void setupActivityComponent(@NonNull AppComponent appComponent) {
+        DaggerNavigationBaiduComponent.builder()
+                .appComponent(appComponent)
+                .view(this)
+                .build()
+                .inject(this);
+    }
+
+    @Override
+    public int initView(@Nullable Bundle savedInstanceState) {
+        return R.layout.activity_navigation_baidu;//setContentView(id);
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void initData(@Nullable Bundle savedInstanceState) {
+        setTitle(getString(R.string.menu_0));
+        mDeviceLatitude = getIntent().getLongExtra(Intent_Lat_Key, 0);
+        mDeviceLongitude = getIntent().getLongExtra(Intent_Lon_Key, 0);
+        mDeviceState = getIntent().getIntExtra(Intent_State_Key, 2);
+
+        mDeviceLat = (double) mDeviceLatitude / 1000000;
+        mDeviceLon = (double) mDeviceLongitude / 1000000;
+        carLocation = new LatLng(mDeviceLat, mDeviceLon);
+
+        mBaiduMap = mapView.getMap();
+        if (ConstantValue.isMapSatelliteMap()) {
+            mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
+        }
+        mapView.showZoomControls(false);
+        mCurrentMode = MyLocationConfiguration.LocationMode.NORMAL;
+        bitmapHelper = new BitmapHelperBaidu(this);
+        mBuilder = new LatLngBounds.Builder();
+        tvAddressHint.setText(getString(R.string.address) + "：");
+
+        onBaiduMapShow();
+
+        MarkerOptions markerOption = new MarkerOptions();
+        markerOption.position(carLocation);
+        markerOption.icon(getMarkerIcon());
+        markerOption.anchor(0.5f, 1);
+        markerOption.draggable(false);
+        markerOption.visible(true);
+        mBaiduMap.addOverlay(markerOption);
+
+        AddressParseUtil.getAmapAddress(this, tvAddress, mDeviceLat, mDeviceLon, "");
+    }
+
+    /**
+     * 初始化百度地图
+     */
+    private void onBaiduMapShow() {
+        if (mBaiduMap != null) {
+            mBaiduMap.setMyLocationEnabled(true);
+
+            //定位初始化
+            mLocationClient = new LocationClient(this);
+
+            //通过LocationClientOption设置LocationClient相关参数
+            LocationClientOption option = new LocationClientOption();
+            option.setOpenGps(true); // 打开gps
+            option.setCoorType("gcj02"); // 设置坐标类型
+            option.setScanSpan(10000);
+            //可选，设置是否需要地址信息，默认不需要
+            option.setIsNeedAddress(true);
+            //可选，设置是否需要地址描述
+            option.setIsNeedLocationDescribe(true);
+
+            //设置locationClientOption
+            mLocationClient.setLocOption(option);
+
+            initOritationListener();
+            //注册LocationListener监听器
+            MyLocationListener myLocationListener = new MyLocationListener();
+            mLocationClient.registerLocationListener(myLocationListener);
+        }
+    }
+
+    /**
+     * 初始化方向传感器
+     */
+    private void initOritationListener() {
+        myOrientationListener = new MyOrientationListener(MyApplication.getMyApp());
+        myOrientationListener.setmOnOrientationListener(new MyOrientationListener.OnOrientationListener() {
+            @Override
+            public void onOrientationChanged(float x) {
+                mXDirection = (int) x;
+                // 构造定位数据
+                MyLocationData locData = new MyLocationData.Builder()
+                        .accuracy(mCurrentAccracy)
+                        // 此处设置开发者获取到的方向信息，顺时针0-360
+                        .direction(mXDirection)
+                        .latitude(mLatitude)
+                        .longitude(mLongitude).build();
+                // 设置定位数据
+                mBaiduMap.setMyLocationData(locData);
+                // 设置自定义图标
+                // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
+                MyLocationConfiguration config = new MyLocationConfiguration(
+                        mCurrentMode, true, bitmapHelper.getBitmapZoomForUserLocation(mZoom), accuracyCircleFillColor, accuracyCircleStrokeColor);
+                mBaiduMap.setMyLocationConfiguration(config);
+            }
+        });
+    }
+
+    public class MyLocationListener extends BDAbstractLocationListener {
+        @SuppressLint("SetTextI18n")
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            //mapView 销毁后不在处理新接收的位置
+            if (location == null || mapView == null) {
+                return;
+            }
+            userLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            mCurrentAccracy = location.getRadius();
+            mLatitude = location.getLatitude();
+            mLongitude = location.getLongitude();
+
+            if (location.getLatitude() != 0 && location.getLongitude() != 0) {
+                mLocationClient.stop();
+            }
+
+            MyLocationData locData = new MyLocationData.Builder()
+                    .accuracy(location.getRadius())
+                    // 此处设置开发者获取到的方向信息，顺时针0-360
+                    .direction(mXDirection)
+                    .latitude(location.getLatitude())
+                    .longitude(location.getLongitude()).build();
+            mBaiduMap.setMyLocationData(locData);
+
+            if (userLocation != null && carLocation != null) {
+                zoomMap(userLocation, carLocation);
+            }
+
+            //计算p1、p2两点之间的直线距离，单位：米
+            double distance = DistanceUtil.getDistance(userLocation, carLocation);
+            if (distance >= 1000) {
+                tvDistance.setText(getString(R.string.distance_between_people_and_equipment) + "：" + Utils.formatValue(distance / 1000) + "km");
+            } else {
+                tvDistance.setText(getString(R.string.distance_between_people_and_equipment) + "：" + Utils.formatValue(distance)
+                        + getString(R.string.meter));
+            }
+        }
+    }
+
+    /**
+     * 缩放地图
+     */
+    private void zoomMap(LatLng peoLatLng, LatLng carLatLng) {
+        mBuilder.include(peoLatLng);
+        mBuilder.include(carLatLng);
+        if (mBaiduMap != null) {
+            ivNavigation.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newLatLngBounds(mBuilder.build(), 600, 600));
+                }
+            }, 500);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
+        mapView.onResume();
+        //开启地图定位图层
+        if (mLocationClient != null) {
+            mLocationClient.start();
+        }
+        // 开启方向传感器
+        myOrientationListener.start();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
+        mapView.onPause();
+        if (mLocationClient != null) {
+            mLocationClient.stop();
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        // 关闭方向传感器
+        myOrientationListener.stop();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mLocationClient != null) {
+            mLocationClient.stop();
+        }
+        if (mapView != null) {
+            mapView.onDestroy();
+        }
+        mapView = null;
+        super.onDestroy();
+    }
+
+    /**
+     * 绘制设备图标等信息
+     *
+     * @return
+     */
+    private BitmapDescriptor getMarkerIcon() {
+        View view = View.inflate(this, R.layout.layout_marker_navigation, null);
+        ImageView ivCar = view.findViewById(R.id.iv_car);
+        ivCar.setImageResource(R.drawable.icon_device_on);
+
+//        switch (mDeviceState) {
+//            case 0:
+//                ivCar.setImageResource(R.drawable.icon_device_static);
+//                break;
+//            case 1:
+//                ivCar.setImageResource(R.drawable.icon_device_on);
+//                break;
+//            case 2:
+//                ivCar.setImageResource(R.drawable.icon_device_off);
+//                break;
+//        }
+        return convertViewToBitmap(view);
+    }
+
+    private static BitmapDescriptor convertViewToBitmap(View view) {
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        return BitmapDescriptorFactory.fromBitmap(view.getDrawingCache());
+    }
+
+    @Override
+    public void showMessage(@NonNull String message) {
+        checkNotNull(message);
+        ArmsUtils.snackbarText(message);
+    }
+
+    @Override
+    public void launchActivity(@NonNull Intent intent) {
+        checkNotNull(intent);
+        ArmsUtils.startActivity(intent);
+    }
+
+    @Override
+    public void killMyself() {
+        finish();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
+    @OnClick(R.id.iv_navigation)
+    public void onViewClicked() {
+        if (Utils.isButtonQuickClick()) {
+            NavigationDialog dialog = new NavigationDialog();
+            dialog.show(getSupportFragmentManager(), mDeviceLat, mDeviceLon);
+        }
+    }
+}

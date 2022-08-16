@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="PayPsdInputView">
+
+        <attr name="maxCount" format="integer" />
+        <attr name="circleColor" format="color" />
+        <attr name="bottomLineColor" format="color" />
+        <attr name="radius" format="dimension" />
+        <attr name="divideLineWidth" format="dimension" />
+        <attr name="divideLineColor" format="color" />
+        <attr name="rectAngle" format="dimension" />
+        <attr name="focusedColor" format="color" />
+        <attr name="psdType" format="enum">
+            <enum name="weChat" value="0" />
+            <enum name="bottomLine" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CircleProgressBarView">
+
+        <attr name="circleBgStrokeWidth" format="dimension" />
+        <attr name="progressStrokeWidth" format="dimension" />
+
+        <attr name="circleBgColor" format="color" />
+        <attr name="progressColor" format="color" />
+
+        <attr name="circleAnimationDuration" format="integer" />
+
+        <attr name="isDrawCenterProgressText" format="boolean" />
+
+        <attr name="centerProgressTextColor" format="color" />
+        <attr name="centerProgressTextSize" format="dimension" />
+
+    </declare-styleable>
+
+    <declare-styleable name="RadarWaveView">
+
+        <attr name="waveColor" format="color" />
+
+        <attr name="waveAmplitude" format="dimension" />
+
+        <attr name="waveSpeed" format="float" />
+
+        <attr name="waveStartPeriod" format="float" />
+        <attr name="waveStart" format="boolean" />
+
+        <attr name="waveFillTop" format="boolean" />
+        <attr name="waveFillBottom" format="boolean" />
+
+        <attr name="waveFillType" format="enum">
+            <enum name="top" value="0" />
+            <enum name="bottom" value="1" />
+        </attr>
+
+        <attr name="waveType" format="enum">
+            <enum name="sin" value="0" />
+            <enum name="cos" value="1" />
+        </attr>
+
+    </declare-styleable>
+
+    <declare-styleable name="RoundCornerImageView">
+        <attr name="radius_round" format="dimension" />
+        <attr name="left_top_radius" format="dimension" />
+        <attr name="right_top_radius" format="dimension" />
+        <attr name="right_bottom_radius" format="dimension" />
+        <attr name="left_bottom_radius" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="WheelView">
+        <attr name="normalTextColor" format="color" />
+        <attr name="normalTextSize" format="dimension" />
+        <attr name="selectedTextColor"/>
+        <attr name="selectedTextSize"/>
+        <attr name="unitHight" format="dimension" />
+        <attr name="itemNumber" format="integer" />
+        <attr name="lineColor" format="color" />
+        <attr name="bottomLineColorWheel" format="color" />
+        <attr name="lineHeight" format="dimension" />
+        <attr name="firstLineAndSecondLineSpace" format="dimension" />
+        <attr name="maskHight" format="dimension" />
+        <attr name="noEmpty" format="boolean" />
+        <attr name="isEnable" format="boolean" />
+    </declare-styleable>
+
+    <!--    时间选择器-->
+    <attr name="halfVisibleItemCount" format="integer" />
+    <attr name="itemTextSize" format="dimension" />
+    <attr name="itemMaximumWidthText" format="string" />
+    <attr name="itemTextColor" format="color" />
+    <attr name="textGradual" format="boolean" />
+    <attr name="selectedTextColor" format="color" />
+    <attr name="selectedTextSize" format="dimension" />
+    <attr name="currentItemPosition" format="integer" />
+    <attr name="itemWidthSpace" format="dimension" />
+    <attr name="itemHeightSpace" format="dimension" />
+    <attr name="zoomInSelectedItem" format="boolean" />
+    <attr name="wheelCyclic" format="boolean" />
+    <attr name="wheelCurtain" format="boolean" />
+    <attr name="wheelCurtainColor" format="color" />
+    <attr name="wheelCurtainBorder" format="boolean" />
+    <attr name="wheelCurtainBorderColor" format="color" />
+    <attr name="indicatorText" format="string" />
+    <attr name="indicatorTextSize" format="dimension" />
+    <attr name="indicatorTextColor" format="color" />
+
+    <declare-styleable name="WheelPicker">
+        <attr name="halfVisibleItemCount" />
+        <attr name="itemTextSize" />
+        <attr name="itemMaximumWidthText" />
+        <attr name="itemTextColor" />
+        <attr name="textGradual" />
+        <attr name="selectedTextColor" />
+        <attr name="selectedTextSize" />
+        <attr name="currentItemPosition" />
+        <attr name="itemWidthSpace" />
+        <attr name="itemHeightSpace" />
+        <attr name="zoomInSelectedItem" />
+        <attr name="wheelCyclic" />
+        <attr name="wheelCurtain" />
+        <attr name="wheelCurtainColor" />
+        <attr name="wheelCurtainBorder" />
+        <attr name="wheelCurtainBorderColor" />
+        <attr name="indicatorText" />
+        <attr name="indicatorTextSize" />
+        <attr name="indicatorTextColor" />
+    </declare-styleable>
+
+    <declare-styleable name="YearPicker">
+        <attr name="startYear" format="integer" />
+        <attr name="endYear" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="MonthPicker"></declare-styleable>
+
+    <declare-styleable name="DatePicker">
+        <attr name="halfVisibleItemCount" />
+        <attr name="itemTextSize" />
+        <attr name="itemTextColor" />
+        <attr name="textGradual" />
+        <attr name="selectedTextColor" />
+        <attr name="selectedTextSize" />
+        <attr name="itemWidthSpace" />
+        <attr name="itemHeightSpace" />
+        <attr name="zoomInSelectedItem" />
+        <attr name="wheelCyclic" />
+        <attr name="wheelCurtain" />
+        <attr name="wheelCurtainColor" />
+        <attr name="wheelCurtainBorder" />
+        <attr name="wheelCurtainBorderColor" />
+    </declare-styleable>
+
+    <declare-styleable name="TypefaceTextView">
+        <attr name="typeface" format="string" />
+    </declare-styleable>
+
+
+    <declare-styleable name="CalendarPickerView">
+        <attr name="android:background" />
+        <attr name="dividerColor" format="color" />
+        <attr name="dayBackground" format="reference" />
+        <attr name="dayTextColor" format="color" />
+        <attr name="titleTextColor" format="color" />
+        <attr name="displayHeader" format="boolean" />
+        <attr name="headerTextColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="calendar_cell">
+        <attr name="state_selectable" format="boolean" />
+        <attr name="state_current_month" format="boolean" />
+        <attr name="state_today" format="boolean" />
+        <attr name="state_range_first" format="boolean" />
+        <attr name="state_range_middle" format="boolean" />
+        <attr name="state_range_last" format="boolean" />
+        <attr name="state_highlighted" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="MarqueeViewStyle">
+        <attr name="mvInterval" format="integer|reference"/>
+        <attr name="mvAnimDuration" format="integer|reference"/>
+        <attr name="mvTextSize" format="dimension|reference"/>
+        <attr name="mvTextColor" format="color|reference"/>
+        <attr name="mvSingleLine" format="boolean"/>
+        <attr name="mvGravity">
+            <enum name="left" value="0"/>
+            <enum name="center" value="1"/>
+            <enum name="right" value="2"/>
+        </attr>
+        <attr name="mvDirection">
+            <enum name="bottom_to_top" value="0"/>
+            <enum name="top_to_bottom" value="1"/>
+            <enum name="right_to_left" value="2"/>
+            <enum name="left_to_right" value="3"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CalendarView">
+
+        <attr name="calendar_padding" format="dimension" /><!--日历内部左右padding-->
+
+        <attr name="week_background" format="color" /><!--周背景-->
+        <attr name="week_line_background" format="color" /><!--线条颜色-->
+        <attr name="week_text_color" format="color" /><!--周栏字体颜色-->
+        <attr name="week_text_size" format="dimension" /><!--周栏字体大小-->
+        <attr name="week_line_margin" format="dimension" /><!--线条margin-->
+
+        <attr name="month_view" format="string" /><!--完全自定义月视图-->
+        <attr name="week_view" format="string" /> <!--完全自定义周视图-->
+        <attr name="year_view" format="string" /> <!--完全自定义年视图-->
+        <attr name="week_bar_height" format="dimension" /> <!--星期栏的高度-->
+        <attr name="week_bar_view" format="string" /> <!--如果需要的话使用自定义星期栏-->
+
+        <attr name="scheme_text" format="string" />
+        <attr name="day_text_size" format="dimension" />
+        <attr name="lunar_text_size" format="dimension" />
+        <attr name="calendar_height" format="dimension" />
+        <attr name="scheme_text_color" format="color" />
+        <attr name="scheme_month_text_color" format="color" />
+        <attr name="scheme_lunar_text_color" format="color" />
+        <attr name="scheme_theme_color" format="color" />
+
+        <attr name="selected_theme_color" format="color" />
+        <attr name="selected_text_color" format="color" />
+        <attr name="selected_lunar_text_color" format="color" />
+
+        <attr name="current_day_text_color" format="color" />
+        <attr name="current_day_lunar_text_color" format="color" />
+        <attr name="current_month_text_color" format="color" />
+        <attr name="other_month_text_color" format="color" />
+        <attr name="current_month_lunar_text_color" format="color" />
+        <attr name="other_month_lunar_text_color" format="color" />
+
+
+        <!-- 年视图相关 -->
+        <attr name="year_view_month_text_size" format="dimension" />
+        <attr name="year_view_day_text_size" format="dimension" />
+        <attr name="year_view_month_text_color" format="color" />
+        <attr name="year_view_day_text_color" format="color" />
+        <attr name="year_view_scheme_color" format="color" />
+        <attr name="year_view_background" format="color" />
+        <attr name="year_view_month_height" format="dimension" />
+        <attr name="year_view_week_height" format="dimension" />
+        <attr name="year_view_week_text_size" format="dimension" />
+        <attr name="year_view_week_text_color" format="color" />
+        <attr name="year_view_padding" format="dimension" />
+        <attr name="year_view_month_margin_top" format="dimension" />
+        <attr name="year_view_month_margin_bottom" format="dimension" />
+
+        <!--日期范围-->
+        <attr name="min_year" format="integer" />
+        <attr name="max_year" format="integer" />
+        <attr name="min_year_month" format="integer" />
+        <attr name="max_year_month" format="integer" />
+        <attr name="min_year_day" format="integer" />
+        <attr name="max_year_day" format="integer" />
+
+
+        <!--月视图是否可滚动-->
+        <attr name="month_view_scrollable" format="boolean" />
+        <!--周视图是否可滚动-->
+        <attr name="week_view_scrollable" format="boolean" />
+        <!--年视图是否可滚动-->
+        <attr name="year_view_scrollable" format="boolean" />
+
+        <!-- 月份显示模式 -->
+        <attr name="month_view_show_mode">
+            <enum name="mode_all" value="0" />
+            <enum name="mode_only_current" value="1" />
+            <enum name="mode_fix" value="2" />
+        </attr>
+
+        <!-- 自定义周起始 -->
+        <attr name="week_start_with">
+            <enum name="sun" value="1" />
+            <enum name="mon" value="2" />
+            <enum name="sat" value="7" />
+        </attr>
+
+        <!-- 自定义选择模式 -->
+        <attr name="select_mode">
+            <enum name="default_mode" value="0" />
+            <enum name="single_mode" value="1" />
+            <enum name="range_mode" value="2" />
+            <enum name="multi_mode" value="3" />
+        </attr>
+
+        <!-- when select_mode = multi_mode -->
+        <attr name="max_multi_select_size" format="integer" />
+
+        <!-- when select_mode = range_mode -->
+        <attr name="min_select_range" format="integer" />
+        <attr name="max_select_range" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="CalendarLayout">
+        <attr name="default_status">
+            <enum name="expand" value="0" />
+            <enum name="shrink" value="1" />
+        </attr>
+
+
+        <!-- 手势模式 -->
+        <attr name="gesture_mode">
+            <enum name="default_mode" value="0" />
+            <!--<enum name="only_calendar" value="1" />-->
+            <enum name="disabled" value="2" />
+        </attr>
+
+        <attr name="calendar_show_mode">
+            <enum name="both_month_week_view" value="0" />
+            <enum name="only_week_view" value="1" />
+            <enum name="only_month_view" value="2" />
+        </attr>
+
+        <attr name="calendar_content_view_id" format="integer" />
+    </declare-styleable>
+
+
+    <!-- 圆形进度条 -->
+    <declare-styleable name="CircularProgressView">
+        <attr name="backWidth" format="dimension" />    <!--背景圆环宽度-->
+        <attr name="progWidth" format="dimension" />    <!--进度圆环宽度-->
+        <attr name="backColor" format="color" />        <!--背景圆环颜色-->
+        <attr name="progColor" format="color" />        <!--进度圆环颜色-->
+        <attr name="progStartColor" format="color" />   <!--进度圆环开始颜色-->
+        <attr name="progFirstColor" format="color" />   <!--进度圆环结束颜色-->
+        <attr name="progress" format="integer" />       <!--圆环进度-->
+    </declare-styleable>
+
+    <declare-styleable name="TriangleView">
+        <attr name="trv_color" format="color" />
+        <attr name="trv_direction">
+            <enum name="top" value="0" />
+            <enum name="bottom" value="1" />
+            <enum name="right" value="2" />
+            <enum name="left" value="3" />
+        </attr>
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,85 @@
+package com.slxk.hounddog.mvp.ui.adapter;
+
+import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.text.TextUtils;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
+import com.slxk.hounddog.R;
+import com.slxk.hounddog.db.DeviceModel;
+import com.slxk.hounddog.mvp.utils.DeviceUtils;
+import com.slxk.hounddog.mvp.utils.ResultDataUtils;
+
+import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+/**
+ * 罗盘-设备列表
+ */
+public class CompassDeviceAdapter extends BaseQuickAdapter<DeviceModel, BaseViewHolder> {
+
+    public CompassDeviceAdapter(int layoutResId, @Nullable List<DeviceModel> data) {
+        super(layoutResId, data);
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    protected void convert(@NonNull BaseViewHolder helper, DeviceModel item) {
+        ImageView ivState = helper.getView(R.id.iv_state);
+        TextView tvName = helper.getView(R.id.tv_name);
+        TextView tvBattery = helper.getView(R.id.tv_battery);
+        TextView tvDistance = helper.getView(R.id.tv_distance);
+        switch (item.getState()) {
+            case ResultDataUtils.Device_State_Line_Down:
+                ivState.setImageResource(R.drawable.icon_device_off);
+                break;
+            case ResultDataUtils.Device_State_Line_On:
+                ivState.setImageResource(R.drawable.icon_device_on);
+                break;
+            case ResultDataUtils.Device_State_Line_Sleep:
+                ivState.setImageResource(R.drawable.icon_device_static);
+                break;
+        }
+        if (!TextUtils.isEmpty(item.getDevice_name())) {
+            tvName.setText(item.getDevice_name());
+        } else {
+            tvName.setText(item.getImei());
+        }
+        tvBattery.setText(mContext.getString(R.string.battery) + item.getPower() + "%");
+        if (item.getDistance() == 0){
+            tvDistance.setText(mContext.getString(R.string.distance) + "：" + mContext.getString(R.string.not));
+        }else{
+            tvDistance.setText(mContext.getString(R.string.distance) + DeviceUtils.getDeviceDistance(mContext, item.getDistance()));
+        }
+        if (item.getLat() != 0 && item.getLon() != 0){
+            if (!TextUtils.isEmpty(item.getColor())){
+                tvName.setTextColor(Color.parseColor(item.getColor()));
+                tvBattery.setTextColor(Color.parseColor(item.getColor()));
+                tvDistance.setTextColor(Color.parseColor(item.getColor()));
+            }else{
+                tvName.setTextColor(mContext.getResources().getColor(R.color.color_333333));
+                tvBattery.setTextColor(mContext.getResources().getColor(R.color.color_333333));
+                tvDistance.setTextColor(mContext.getResources().getColor(R.color.color_333333));
+            }
+        }else{
+            tvName.setTextColor(mContext.getResources().getColor(R.color.color_999999));
+            tvBattery.setTextColor(mContext.getResources().getColor(R.color.color_999999));
+            tvDistance.setTextColor(mContext.getResources().getColor(R.color.color_999999));
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(BaseViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+        ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+        params.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+    }
+
+}

@@ -1,0 +1,112 @@
+/*
+ * Copyright 2017 JessYan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.slxk.hounddog.mvp.model.api;
+
+import com.slxk.hounddog.mvp.utils.ConstantValue;
+
+/**
+ * ================================================
+ * 存放一些与 API 有关的东西,如请求地址,请求码等
+ * <p>
+ * Created by JessYan on 08/05/2016 11:25
+ * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
+ * <a href="https://github.com/JessYanCoding">Follow me</a>
+ * ================================================
+ */
+public interface Api {
+
+    boolean isRelease = false;//是否发布版本
+    String APP_DOMAIN = ConstantValue.getAPPServiceIp(isRelease); // API域名
+//    String APP_DOMAIN = isRelease ? "http://yjzx.8325.com" : "http://sl.8325.com"; // API域名
+    boolean APP_Multi_Language = true; // 是否启动多语言版本
+
+    // 返回成功码
+    int SUCCESS = 0; // 成功
+    int OUT_OF_DATE = 268697631; // 登录已过期
+    int SUCCESS_200 = 200; // 成功，特殊情况
+    int Device_Freeze = 269877281; // 设备已冻结
+    int Data_Change = 269877251; // 数据已变更
+    int Operational_Restrictions = 269877293; // 操作限制
+    int Mobile_Bind_Used = 269877295; // 手机号已绑定其他账号或设备
+    int Mobile_Code_Error = 269877302; // 验证码错误
+
+    // 登录请求头
+    String HEADER_RELEASE = "Content-Type:application/x-www-form-urlencoded";
+
+    // 发布任务请求头
+    String HEADER_RELEASE_TYPE = "Content-Type:application/json";
+
+    // 获取手机IP地址信息
+    String App_GetIPUrl = "http://pv.sohu.com/cityjson?ie=utf-8";
+
+    // 隐私政策
+    String Privacy_Policy = "http://cx.52zdx.com/privacyPolicy_haodog.html";
+    // 用户手册
+    String User_Manual = "http://cx.52zdx.com/manual";
+
+    // mob短信
+    String Mob_App_Key = "356e5672f7a9f";
+    // mob短信模板code
+    String Mob_Module_Code = "7025349";
+    // 用户登录类型
+    int App_Type = 26;
+    // 版本更新类型
+    String Check_Version_Type = "haodog";
+    // sim卡充值
+    String Pay_Sim_Recharge = isRelease ? "http://cx.52zdx.com/pay/" : "http://webcs.cciot.cc/pay/"; //测试 http://webcs.cciot.cc/pay/  正式 http://web.cciot.cc/pay/
+    //支付完成返回
+    String Pay_Sim_Success_Return = isRelease ? "http://cx.52zdx.com/pay/return" : "http://webcs.cciot.cc/pay/return"; //测试 http://webcs.cciot.cc/pay/return  正式 http://web.cciot.cc/pay/return
+    //支付完成返回
+    String Pay_Sim_Referer = isRelease ? "http://cx.52zdx.com" : "http://webcs.cciot.cc"; //测试 http://webcs.cciot.cc  正式 http://web.cciot.cc
+    // 增值服务充值
+    String Pay_Record_Recharge = "http://zbcar.8325.com/pay_zb_v3/app_pay_record_zb.php";
+
+    // 百度地图解析地址API
+    String Baidu_API_Code = "C5:90:EB:84:CA:D4:5F:62:31:36:1E:2E:B1:6A:12:32:35:61:37:D4;com.slxk.hounddog";
+    String Baidu_API = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=OwEsaatccGLGjjHfsMsoC6jht2P7QTm1&output=json&coordtype=wgs84ll&mcode="
+            + Baidu_API_Code + "&location=";
+
+    // 帮助中心
+    String Help_Center = isRelease ? "http://web.cciot.cc/help" : "http://webcs.cciot.cc/help";
+
+    // 瓦片地图
+    // 普通地图
+    String Map_2D = "http://gm.cciot.cc/title/?s=m&g=1&x=%d&y=%d&z=%d";
+    // 卫星地图
+    String Map_SatelliteMap = "http://gm.cciot.cc/title/?s=y&g=1&x=%d&y=%d&z=%d";
+
+    // 温湿度折线图
+    String Temperature_And_Humidity = isRelease ? "http://web.cciot.cc/temp/" : "http://webcs.cciot.cc/temp/";
+
+    String Sim_Fxft = "fxft"; // sim卡类型，福信富通
+    String Sim_Xc = "xc"; // sim卡类型，福信富通
+
+    String Device_Log_Url = "http://114.215.25.114:80/imeiLog.php";
+
+    // https://apilocate.amap.com/position?accesstype=0&bts=460,1,12429,15051,-113&output=gson&key=d96829b50d22cabdbfce8d310d18b352
+    String BaseStation_Location_Url = "https://apilocate.amap.com/position";
+    String BaseStation_Accesstype = "0";
+    String BaseStation_Output = "gson";
+    String Amap_Key = "37104ef9061a38736b1bcdd582687190";
+
+    // 查询蓝牙升级域名
+    String Bluetooth_Upgrade = "http://yc.8325.com/upgrade/check_upgrade";
+    // 上报升级结果
+    String Bluetooth_Report_Upgrade_Rst = "http://yc.8325.com/upgrade/report_upgrade_rst";
+    // 蓝牙升级文件后缀
+    String Bluetooth_bin = ".bin";
+
+}

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_ffffff_fillet_6">
+
+    <TextView
+        android:id="@+id/tv_alert_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_16"
+        android:textColor="@color/color_333333"
+        android:layout_marginTop="@dimen/dp_35"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="@string/app_update"
+        android:layout_marginStart="@dimen/dp_30"
+        android:layout_marginEnd="@dimen/dp_30"/>
+
+    <TextView
+        android:id="@+id/tv_version_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/sp_13"
+        android:textColor="@color/color_333333"
+        android:layout_marginTop="@dimen/dp_10"/>
+
+    <TextView
+        android:id="@+id/tv_alert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_25"
+        android:layout_marginEnd="@dimen/dp_25"
+        android:textSize="@dimen/sp_13"
+        android:text="@string/tip"
+        android:textColor="@color/color_333333"
+        android:layout_marginTop="@dimen/dp_20"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/dp_25"
+        android:background="@color/color_E5E5E5"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:orientation="horizontal"
+        android:background="@color/transparent">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_333333"
+            android:gravity="center"
+            android:text="@string/not_update_app"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/color_E5E5E5"/>
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:background="@color/transparent"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_00C8F8"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:text="@string/update_app"/>
+    </LinearLayout>
+
+</LinearLayout>

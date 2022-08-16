@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_ffffff_fillet_6">
+
+    <TextView
+        android:id="@+id/tv_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/sp_17"
+        android:textColor="@color/color_333333"
+        android:layout_marginTop="@dimen/dp_55"
+        android:text="@string/bluetooth_disconnect_hint"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_32"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/dp_46"
+        android:layout_marginBottom="@dimen/dp_43"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btn_no"
+            android:layout_width="@dimen/dp_80"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_ffffff_bcbcbc_2"
+            android:gravity="center"
+            android:textSize="@dimen/sp_15"
+            android:textColor="@color/color_999999"
+            android:text="@string/no"/>
+
+        <Button
+            android:id="@+id/btn_yes"
+            android:layout_width="@dimen/dp_80"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_00c8f8_fillet_2"
+            android:layout_marginStart="@dimen/dp_40"
+            android:gravity="center"
+            android:textSize="@dimen/sp_15"
+            android:textColor="@color/color_FFFFFF"
+            android:text="@string/yes"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,13 @@
+[
+{
+  "directory": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/release/armeabi-v7a",
+  "command": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang --target=armv7-none-linux-androideabi --gcc-toolchain=/Users/lixiang/Library/Android/ndk/android-ndk-r16b/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sysroot -Dwebrtc_ns_EXPORTS -I../../../../src/main/include  -isystem /Users/lixiang/Library/Android/ndk/android-ndk-r16b/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=19 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fno-integrated-as -mthumb -Wa,--noexecstack -Wformat -Werror=format-security  -Os -DNDEBUG  -fPIC   -o CMakeFiles/webrtc_ns.dir/src/main/cpp/noise_suppression.c.o   -c /Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/src/main/cpp/noise_suppression.c",
+  "file": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/src/main/cpp/noise_suppression.c"
+},
+
+{
+  "directory": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/.cxx/cmake/release/armeabi-v7a",
+  "command": "/Users/lixiang/Library/Android/ndk/android-ndk-r16b/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang --target=armv7-none-linux-androideabi --gcc-toolchain=/Users/lixiang/Library/Android/ndk/android-ndk-r16b/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64 --sysroot=/Users/lixiang/Library/Android/ndk/android-ndk-r16b/sysroot -Dwebrtc_ns_EXPORTS -I../../../../src/main/include  -isystem /Users/lixiang/Library/Android/ndk/android-ndk-r16b/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=19 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fno-integrated-as -mthumb -Wa,--noexecstack -Wformat -Werror=format-security  -Os -DNDEBUG  -fPIC   -o CMakeFiles/webrtc_ns.dir/src/main/cpp/noise_suppression_jni.c.o   -c /Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/src/main/cpp/noise_suppression_jni.c",
+  "file": "/Users/lixiang/Desktop/信春项目/Android/hounddog/webrtc_ns/src/main/cpp/noise_suppression_jni.c"
+}
+]

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_mode_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_14"
+        android:textColor="@color/color_333333"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/dp_16"
+        android:text="@string/wireless_positioning_speed"/>
+
+    <LinearLayout
+        android:id="@+id/ll_mode_time"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_41"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginStart="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_15"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_15"
+        android:background="@drawable/bg_e5e5e5_1">
+
+        <TextView
+            android:id="@+id/tv_mode_time"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/color_333333"
+            tools:text="5秒"/>
+
+        <ImageView
+            android:layout_width="@dimen/dp_13"
+            android:layout_height="@dimen/dp_7"
+            android:src="@drawable/icon_down"
+            android:layout_marginEnd="@dimen/dp_15"/>
+    </LinearLayout>
+
+</LinearLayout>

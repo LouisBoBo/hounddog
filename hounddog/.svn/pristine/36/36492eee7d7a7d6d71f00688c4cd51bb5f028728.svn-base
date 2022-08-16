@@ -1,0 +1,242 @@
+{
+  "abi": "ARMEABI",
+  "abiPlatformVersion": 19,
+  "buildSettings": {
+    "environmentVariables": []
+  },
+  "cmake": {
+    "cmakeArtifactsBaseFolder": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx\\cmake\\release\\armeabi",
+    "cmakeServerLogFile": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx\\cmake\\release\\armeabi\\cmake_server_log.txt",
+    "cmakeWrappingBaseFolder": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx\\cxx\\release\\armeabi",
+    "effectiveConfiguration": {
+      "name": "traditional-android-studio-cmake-environment",
+      "description": "Composite reified CMakeSettings configuration",
+      "generator": "Ninja",
+      "inheritEnvironments": [
+        "ndk"
+      ],
+      "buildRoot": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx\\cmake\\release\\armeabi",
+      "cmakeToolchain": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\build\\cmake\\android.toolchain.cmake",
+      "cmakeExecutable": "D:\\Android\\AndroidSDK\\sdk\\cmake\\3.10.2.4988404\\bin\\cmake.exe",
+      "variables": [
+        {
+          "name": "CMAKE_CXX_FLAGS",
+          "value": "-frtti -fexceptions"
+        },
+        {
+          "name": "CMAKE_FIND_ROOT_PATH",
+          "value": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx\\cmake\\release\\prefab\\armeabi\\prefab"
+        },
+        {
+          "name": "CMAKE_BUILD_TYPE",
+          "value": "Release"
+        },
+        {
+          "name": "CMAKE_TOOLCHAIN_FILE",
+          "value": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\build\\cmake\\android.toolchain.cmake"
+        },
+        {
+          "name": "ANDROID_ABI",
+          "value": "armeabi"
+        },
+        {
+          "name": "ANDROID_NDK",
+          "value": "D:\\Android\\AndroidSDK\\android-ndk-r16b"
+        },
+        {
+          "name": "ANDROID_PLATFORM",
+          "value": "android-19"
+        },
+        {
+          "name": "CMAKE_ANDROID_ARCH_ABI",
+          "value": "armeabi"
+        },
+        {
+          "name": "CMAKE_ANDROID_NDK",
+          "value": "D:\\Android\\AndroidSDK\\android-ndk-r16b"
+        },
+        {
+          "name": "CMAKE_EXPORT_COMPILE_COMMANDS",
+          "value": "ON"
+        },
+        {
+          "name": "CMAKE_LIBRARY_OUTPUT_DIRECTORY",
+          "value": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\build\\intermediates\\cmake\\release\\obj\\armeabi"
+        },
+        {
+          "name": "CMAKE_MAKE_PROGRAM",
+          "value": "D:\\Android\\AndroidSDK\\sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe"
+        },
+        {
+          "name": "CMAKE_SYSTEM_NAME",
+          "value": "Android"
+        },
+        {
+          "name": "CMAKE_SYSTEM_VERSION",
+          "value": "19"
+        },
+        {
+          "name": "ANDROID_TOOLCHAIN",
+          "value": "clang"
+        },
+        {
+          "name": "ANDROID_STL",
+          "value": "c++_static"
+        }
+      ]
+    }
+  },
+  "cxxBuildFolder": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx\\cmake\\release\\armeabi",
+  "info": {
+    "abi": "ARMEABI",
+    "bitness": 32,
+    "deprecated": true,
+    "default": false
+  },
+  "originalCxxBuildFolder": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx\\cmake\\release\\armeabi",
+  "variant": {
+    "buildSystemArgumentList": [
+      "-DANDROID_TOOLCHAIN\u003dclang",
+      "-DANDROID_STL\u003dc++_static"
+    ],
+    "buildTargetSet": [],
+    "cFlagsList": [],
+    "cmakeSettingsConfiguration": "android-gradle-plugin-predetermined-name",
+    "cppFlagsList": [
+      "-frtti -fexceptions"
+    ],
+    "isDebuggableEnabled": false,
+    "module": {
+      "buildSystem": "CMAKE",
+      "cmake": {
+        "cmakeExe": "D:\\Android\\AndroidSDK\\sdk\\cmake\\3.10.2.4988404\\bin\\cmake.exe",
+        "minimumCmakeVersion": "3.10.2",
+        "ninjaExe": "D:\\Android\\AndroidSDK\\sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe"
+      },
+      "cmakeToolchainFile": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\build\\cmake\\android.toolchain.cmake",
+      "cxxFolder": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx",
+      "gradleModulePathName": ":webrtc_ns",
+      "intermediatesFolder": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\build\\intermediates",
+      "makeFile": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\CMakeLists.txt",
+      "moduleBuildFile": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\build.gradle",
+      "moduleRootFolder": "G:\\KyWork\\Android\\hounddog\\webrtc_ns",
+      "ndkDefaultAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "ndkFolder": "D:\\Android\\AndroidSDK\\android-ndk-r16b",
+      "ndkMetaAbiList": [
+        {
+          "abi": "ARMEABI",
+          "bitness": 32,
+          "deprecated": true,
+          "default": false
+        },
+        {
+          "abi": "ARMEABI_V7A",
+          "bitness": 32,
+          "deprecated": false,
+          "default": true
+        },
+        {
+          "abi": "ARM64_V8A",
+          "bitness": 64,
+          "deprecated": false,
+          "default": true
+        },
+        {
+          "abi": "MIPS",
+          "bitness": 32,
+          "deprecated": true,
+          "default": false
+        },
+        {
+          "abi": "MIPS64",
+          "bitness": 64,
+          "deprecated": true,
+          "default": false
+        },
+        {
+          "abi": "X86",
+          "bitness": 32,
+          "deprecated": false,
+          "default": true
+        },
+        {
+          "abi": "X86_64",
+          "bitness": 64,
+          "deprecated": false,
+          "default": true
+        }
+      ],
+      "ndkSupportedAbiList": [
+        "ARMEABI",
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "MIPS",
+        "MIPS64",
+        "X86",
+        "X86_64"
+      ],
+      "ndkDefaultStl": "GNUSTL_STATIC",
+      "ndkVersion": "16.1.4479499",
+      "project": {
+        "compilerSettingsCacheFolder": "G:\\KyWork\\Android\\hounddog\\.cxx",
+        "cxxFolder": "G:\\KyWork\\Android\\hounddog\\.cxx",
+        "isBuildOnlyTargetAbiEnabled": true,
+        "isCmakeBuildCohabitationEnabled": false,
+        "isNativeCompilerSettingsCacheEnabled": false,
+        "rootBuildGradleFolder": "G:\\KyWork\\Android\\hounddog",
+        "sdkFolder": "D:\\Android\\AndroidSDK\\sdk",
+        "isPrefabEnabled": false
+      },
+      "splitsAbiFilterSet": [],
+      "stlSharedObjectMap": {
+        "GNUSTL_SHARED": {
+          "ARMEABI": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\armeabi\\libgnustl_shared.so",
+          "ARMEABI_V7A": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\armeabi-v7a\\libgnustl_shared.so",
+          "ARM64_V8A": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\arm64-v8a\\libgnustl_shared.so",
+          "MIPS": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\mips\\libgnustl_shared.so",
+          "MIPS64": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\mips64\\libgnustl_shared.so",
+          "X86": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86\\libgnustl_shared.so",
+          "X86_64": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\libgnustl_shared.so"
+        },
+        "GNUSTL_STATIC": {},
+        "LIBCXX_SHARED": {
+          "ARMEABI": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\llvm-libc++\\libs\\armeabi\\libc++_shared.so",
+          "ARMEABI_V7A": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\llvm-libc++\\libs\\armeabi-v7a\\libc++_shared.so",
+          "ARM64_V8A": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\llvm-libc++\\libs\\arm64-v8a\\libc++_shared.so",
+          "MIPS": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\llvm-libc++\\libs\\mips\\libc++_shared.so",
+          "MIPS64": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\llvm-libc++\\libs\\mips64\\libc++_shared.so",
+          "X86": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\llvm-libc++\\libs\\x86\\libc++_shared.so",
+          "X86_64": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\llvm-libc++\\libs\\x86_64\\libc++_shared.so"
+        },
+        "LIBCXX_STATIC": {},
+        "NONE": {},
+        "STLPORT_SHARED": {
+          "ARMEABI": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\stlport\\libs\\armeabi\\libstlport_shared.so",
+          "ARMEABI_V7A": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\stlport\\libs\\armeabi-v7a\\libstlport_shared.so",
+          "ARM64_V8A": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\stlport\\libs\\arm64-v8a\\libstlport_shared.so",
+          "MIPS": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\stlport\\libs\\mips\\libstlport_shared.so",
+          "MIPS64": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\stlport\\libs\\mips64\\libstlport_shared.so",
+          "X86": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\stlport\\libs\\x86\\libstlport_shared.so",
+          "X86_64": "D:\\Android\\AndroidSDK\\android-ndk-r16b\\sources\\cxx-stl\\stlport\\libs\\x86_64\\libstlport_shared.so"
+        },
+        "STLPORT_STATIC": {},
+        "SYSTEM": {}
+      }
+    },
+    "objFolder": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\build\\intermediates\\cmake\\release\\obj",
+    "variantName": "release",
+    "validAbiList": [
+      "ARMEABI",
+      "ARMEABI_V7A",
+      "ARM64_V8A"
+    ],
+    "prefabDirectory": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx\\cmake\\release\\prefab",
+    "prefabPackageDirectoryList": []
+  },
+  "prefabFolder": "G:\\KyWork\\Android\\hounddog\\webrtc_ns\\.cxx\\cmake\\release\\prefab\\armeabi"
+}

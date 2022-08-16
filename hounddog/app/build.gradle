@@ -1,0 +1,278 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.huawei.agconnect'
+apply plugin: 'com.mob.sdk'
+
+android {
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    buildToolsVersion rootProject.ext.android["buildToolsVersion"]
+    useLibrary 'org.apache.http.legacy'
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig {
+        applicationId "com.slxk.hounddog"
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode rootProject.ext.android["versionCode"]
+        versionName rootProject.ext.android["versionName"]
+        testInstrumentationRunner rootProject.ext.dependencies["androidJUnitRunner"]
+        multiDexEnabled true
+
+        ndk {
+            //选择要添加的对应 cpu 类型的 .so 库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+            // 还可以添加 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+                BAIDU_API_KEY : rootProject.BAIDU_API_KEY,
+                GOOGLE_API_KEY: rootProject.GOOGLE_API_KEY,
+                AMAP_API_KEY  : rootProject.AMAP_API_KEY
+        ]
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file("$rootDir/keystores/hounddog.jks")
+            storePassword "hound2021"
+            keyAlias "hounddog"
+            keyPassword "hound2021"
+        }
+
+        release {
+            storeFile file("$rootDir/keystores/hounddog.jks")
+            storePassword "hound2021"
+            keyAlias "hounddog"
+            keyPassword "hound2021"
+        }
+
+        // 华为推送
+        config {
+            keyAlias 'hounddog'
+            keyPassword 'hound2021'
+            storeFile file("$rootDir/keystores/hounddog.jks")
+            storePassword 'hound2021'
+        }
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            buildConfigField "boolean", "USE_CANARY", "false"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.config
+        }
+
+        release {
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            buildConfigField "boolean", "USE_CANARY", "false"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            signingConfig signingConfigs.config
+        }
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+        disable "ResourceType"
+        abortOnError false
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDir 'libs'
+        }
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+        jumboMode = true
+        preDexLibraries = false
+        additionalParameters = [
+                '--multi-dex',//多分包
+                '--set-max-idx-number=60000'//每个包内方法数上限
+        ]
+    }
+
+    //自定义apk名称含版本号信息
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "hounddog_${variant.versionName}_${releaseTime()}.apk"
+        }
+    }
+
+}
+
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+}
+
+MobSDK {
+    appKey "356e5672f7a9f"
+    appSecret "f86c36e9e7b639b3ae0ba0d4b2d84d5f"
+    ShareSDK {
+        version "3.9.3"
+        devInfo {
+            Wechat {
+                appId "wxffb325a2320f49e4"
+                appSecret "70f283beb505b87fe30ec44491a7ebbd"
+                path "pages/index/index.html?id=1"
+                withShareTicket true
+                miniprogramType 2
+                bypassApproval false
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    //androidx
+    implementation rootProject.ext.dependencies["cardview"]
+    implementation rootProject.ext.dependencies["design"]
+
+    //tools
+    //注意 Arms 核心库现在并不会依赖某个 EventBus, 要想使用 EventBus, 还请在项目中自行依赖对应的 EventBus
+    //现在支持两种 EventBus, greenrobot 的 EventBus 和畅销书 《Android源码设计模式解析与实战》的作者 何红辉 所作的 AndroidEventBus
+    //依赖后 Arms 会自动检测您依赖的 EventBus 并自动注册
+    //建议使用 AndroidEventBus, 特别是组件化项目, 原因请看 https://github.com/hehonghui/AndroidEventBus/issues/49
+    //这种做法可以让使用者有自行选择三方库的权利, 并且还可以减轻 Arms 的体积
+    implementation rootProject.ext.dependencies["androideventbus"]
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+//    implementation rootProject.ext.dependencies["eventbus"]
+
+    annotationProcessor rootProject.ext.dependencies["dagger2-compiler"]
+    implementation rootProject.ext.dependencies["progressmanager"]
+    implementation rootProject.ext.dependencies["retrofit-url-manager"]
+    implementation rootProject.ext.dependencies["lifecyclemodel"]
+
+    //view
+    annotationProcessor(rootProject.ext.dependencies["butterknife-compiler"]) {
+        exclude module: 'annotation'
+    }
+    implementation(rootProject.ext.dependencies["paginate"]) {
+        exclude module: 'recyclerview'
+    }
+
+    //arms
+    implementation project(':arms')
+//    implementation 'me.jessyan:arms:2.5.2'
+
+    //Arms 核心库不再包含 AndroidAutoLayout, 现在可自行选择屏幕适配方案, 不想使用 AndroidAutoLayout 就不要依赖 arms-autolayout
+//    implementation 'me.jessyan:arms-autolayout:2.5.2'
+
+    //现在已经将 Demo 中的屏幕适配框架从 AndroidAutoLayout 替换为 AndroidAutoSize, AndroidAutoLayout 和 AndroidAutoSize 可以在项目中共存
+    //所以旧项目只要依赖 arms-autolayout 即可兼容之前的旧页面, 新页面可以使用 AndroidAutoSize 进行适配, 等有时间了再将旧页面全部替换为 AndroidAutoSize
+//    implementation rootProject.ext.dependencies["autosize"]
+
+    //Arms 核心库不再包含 Glide, 想使用其他图片加载框架或者想自行扩展 ImageLoaderStrategy 就不要依赖 arms-imageloader-glide
+    //依赖 arms-imageloader-glide 后还需要在 GlobalConfiguration 中手动注册 GlideImageLoaderStrategy
+//    implementation 'me.jessyan:arms-imageloader-glide:2.5.2'
+    implementation project(':arms-imageloader-glide')
+
+    //test
+    testImplementation rootProject.ext.dependencies["junit"]
+    // Leak内存泄漏监测
+//    debugImplementation rootProject.ext.dependencies["canary-debug"]
+
+    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47'
+    implementation 'com.blankj:utilcode:1.29.0'
+
+    //基础工具库
+    implementation 'com.github.vondear.RxTool:RxKit:2.4.1'
+
+    //UI库
+    implementation 'com.github.vondear.RxTool:RxUI:2.4.1'
+
+    //相机库
+    implementation 'com.github.vondear.RxTool:RxCamera:2.4.1'
+
+    //功能库（Zxing扫描与生成二维码条形码 支付宝 微信）
+    //    implementation "com.github.vondear.RxTool:RxFeature:v2.4.1"
+
+    //ArcGis For Android工具库（API：100.1以上版本）
+    implementation 'com.github.vondear.RxTool:RxArcGisKit:2.3.9'
+
+    // listview,gridview适配器
+    api 'com.zhy:base-adapter:3.0.3'
+    //noinspection GradleCompatible
+    implementation 'cc.solart:turbo-recyclerview-helper:1.0.3-beta'
+    implementation 'com.android.support:multidex:1.0.3'
+
+    // 微信开放平台
+    api 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+
+    // 滑动切换view
+    implementation 'com.github.hackware1993:MagicIndicator:1.7.0'
+
+    // 时间选择器
+    api 'com.contrarywind:Android-PickerView:4.1.9'
+
+    implementation 'com.google.zxing:core:3.4.0'
+    // 图片裁剪
+    implementation 'com.github.yalantis:ucrop:2.2.6'
+    // 高德地图
+    api 'com.amap.api:3dmap:7.6.0'
+    api 'com.amap.api:search:7.6.0'
+    api 'com.amap.api:location:5.2.0'
+    // 百度地图
+    implementation 'com.baidu.lbsyun:BaiduMapSDK_Map:7.4.0'
+    implementation 'com.baidu.lbsyun:BaiduMapSDK_Search:7.4.0'
+    implementation 'com.baidu.lbsyun:BaiduMapSDK_Util:7.4.0'
+    implementation 'com.baidu.lbsyun:BaiduMapSDK_Location_All:9.1.8'
+    // GifView
+    api 'com.github.Cutta:GifView:1.4'
+    // 时间选择器，城市选择器
+    api 'com.contrarywind:Android-PickerView:4.1.9'
+    // 上下滑动view
+    api 'com.yinglan.scrolllayout:scrolllayout:1.0.2'
+
+    //极速版 主要移除了一些不常用的编解码器，录音转换，视频压缩
+    implementation 'com.github.microshow:RxFFmpeg:4.9.0-lite'
+
+    // 数据库存储
+    implementation 'com.j256.ormlite:ormlite-android:5.3'
+    implementation 'com.j256.ormlite:ormlite-core:5.3'
+
+    // 录音降噪
+    implementation project(':webrtc_ns')
+
+    // 友盟统计SDK
+    implementation 'com.umeng.umsdk:common:9.4.4'// 必选
+    implementation 'com.umeng.umsdk:asms:1.4.1'// 必选
+    implementation 'com.umeng.umsdk:apm:1.5.2' // 错误分析升级为独立SDK，看crash数据请一定集成，可选
+
+    // 谷歌地图
+    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+
+    // ViewPager依赖库
+    implementation 'com.github.hackware1993:MagicIndicator:1.7.0'
+
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    // 侧滑删除
+    api 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
+    //华为扫描
+    implementation "com.huawei.hms:scan:2.4.0.302"
+    // 蓝牙连接
+    implementation project(':FastBleLib')
+
+    // 华为推送
+    implementation 'com.huawei.hms:push:6.3.0.302'
+    // 小米推送
+    implementation(name: 'MiPush_SDK_Client_5_0_1-C_3rd', ext: 'aar')
+    // vivo推送
+    implementation(name: 'vivo_pushSDK_v3.0.0.4_484', ext: 'aar')
+    // oppo推送
+    implementation(name: 'push-3.0.0', ext: 'aar')
+    //以下依赖都需要添加
+    implementation 'commons-codec:commons-codec:1.6'
+    implementation 'org.greenrobot:eventbus:3.1.1'
+}

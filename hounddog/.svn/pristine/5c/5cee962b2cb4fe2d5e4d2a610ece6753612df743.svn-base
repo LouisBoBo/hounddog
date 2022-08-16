@@ -1,0 +1,353 @@
+package com.slxk.hounddog.mvp.ui.activity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.jess.arms.base.BaseActivity;
+import com.jess.arms.di.component.AppComponent;
+import com.jess.arms.utils.ArmsUtils;
+import com.slxk.hounddog.R;
+import com.slxk.hounddog.app.MyApplication;
+import com.slxk.hounddog.di.component.DaggerLocationModeComponent;
+import com.slxk.hounddog.mvp.contract.LocationModeContract;
+import com.slxk.hounddog.mvp.model.api.ModuleValueService;
+import com.slxk.hounddog.mvp.model.bean.DeviceConfigResultBean;
+import com.slxk.hounddog.mvp.model.bean.LocationModeResultBean;
+import com.slxk.hounddog.mvp.model.bean.LocationModeTime;
+import com.slxk.hounddog.mvp.model.entity.BaseBean;
+import com.slxk.hounddog.mvp.model.putbean.DeviceConfigPutBean;
+import com.slxk.hounddog.mvp.model.putbean.DeviceConfigSetPutBean;
+import com.slxk.hounddog.mvp.model.putbean.LocationModePutBean;
+import com.slxk.hounddog.mvp.model.putbean.LocationModeSetPutBean;
+import com.slxk.hounddog.mvp.presenter.LocationModePresenter;
+import com.slxk.hounddog.mvp.ui.adapter.LocationModeAdapter;
+import com.slxk.hounddog.mvp.utils.DeviceUtils;
+import com.slxk.hounddog.mvp.utils.ResultDataUtils;
+import com.slxk.hounddog.mvp.utils.ToastUtils;
+import com.slxk.hounddog.mvp.utils.Utils;
+import com.slxk.hounddog.mvp.weiget.LocationTimeDialog;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.jess.arms.utils.Preconditions.checkNotNull;
+
+
+/**
+ * ================================================
+ * Description:
+ * <p>
+ * Created by MVPArmsTemplate on 12/24/2021 09:19
+ * <a href="mailto:jess.yan.effort@gmail.com">Contact me</a>
+ * <a href="https://github.com/JessYanCoding">Follow me</a>
+ * <a href="https://github.com/JessYanCoding/MVPArms">Star me</a>
+ * <a href="https://github.com/JessYanCoding/MVPArms/wiki">See me</a>
+ * <a href="https://github.com/JessYanCoding/MVPArmsTemplate">模版请保持更新</a>
+ * ================================================
+ */
+public class LocationModeActivity extends BaseActivity<LocationModePresenter> implements LocationModeContract.View {
+
+    @BindView(R.id.recyclerview)
+    RecyclerView recyclerview;
+    @BindView(R.id.btn_submit)
+    Button btnSubmit;
+    @BindView(R.id.rl_low_power)
+    RelativeLayout rlLowPower;
+    @BindView(R.id.iv_low_power)
+    ImageView ivLowPower;
+
+    private static final String Intent_Simei_Key = "simei_key";
+    private String mSimei;
+
+    private ArrayList<LocationModeTime> mModeListBeans;
+    private LocationModeAdapter mAdapter;
+    private int mMode_id = 0; // 当前定位模式或者选择的定位模式
+    private String mSmode_value; // 定位模式的值，5|30 ，无线模式|网络模式，分隔符"|"
+    private List<String> mSimeiBeas;
+    private int modeSwitch; // 低电模式开关
+
+    public static Intent newInstance(String simei) {
+        Intent intent = new Intent(MyApplication.getMyApp(), LocationModeActivity.class);
+        intent.putExtra(Intent_Simei_Key, simei);
+        return intent;
+    }
+
+    @Override
+    public void setupActivityComponent(@NonNull AppComponent appComponent) {
+        DaggerLocationModeComponent.builder()
+                .appComponent(appComponent)
+                .view(this)
+                .build()
+                .inject(this);
+    }
+
+    @Override
+    public int initView(@Nullable Bundle savedInstanceState) {
+        return R.layout.activity_location_mode;//setContentView(id);
+    }
+
+    @Override
+    public void initData(@Nullable Bundle savedInstanceState) {
+        setTitle(getString(R.string.menu_6));
+        mModeListBeans = new ArrayList<>();
+        mSimeiBeas = new ArrayList<>();
+        mSimei = getIntent().getStringExtra(Intent_Simei_Key);
+
+        recyclerview.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new LocationModeAdapter(R.layout.item_location_mode, mModeListBeans);
+        recyclerview.setAdapter(mAdapter);
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (Utils.isButtonQuickClick()){
+                    onLocationModeTimeSelect(position);
+                }
+            }
+        });
+
+        btnSubmit.setVisibility(View.GONE);
+        if (!TextUtils.isEmpty(mSimei)) {
+            mSimeiBeas.add(mSimei);
+        }
+        getDeviceConfig();
+        getLocationMode();
+    }
+
+    /**
+     * 获取设备的配置信息，支持的功能等
+     */
+    private void getDeviceConfig() {
+        DeviceConfigPutBean.ParamsBean paramsBean = new DeviceConfigPutBean.ParamsBean();
+        paramsBean.setSimei(mSimei);
+        paramsBean.setType(ResultDataUtils.Config_Other);
+
+        DeviceConfigPutBean bean = new DeviceConfigPutBean();
+        bean.setParams(paramsBean);
+        bean.setFunc(ModuleValueService.Fuc_For_Config_Get);
+        bean.setModule(ModuleValueService.Module_For_Config_Get);
+
+        if (getPresenter() != null) {
+            getPresenter().getDeviceConfig(bean);
+        }
+    }
+
+    /**
+     * 获取定位模式
+     */
+    private void getLocationMode(){
+        LocationModePutBean.ParamsBean paramsBean = new LocationModePutBean.ParamsBean();
+        paramsBean.setSimei(mSimei);
+
+        LocationModePutBean bean = new LocationModePutBean();
+        bean.setParams(paramsBean);
+        bean.setFunc(ModuleValueService.Fuc_For_Location_Mode);
+        bean.setModule(ModuleValueService.Module_For_Location_Mode);
+
+        if (getPresenter() != null){
+            getPresenter().getLocationMode(bean);
+        }
+    }
+
+    /**
+     * 定位模式时间选择
+     * @param position
+     */
+    private void onLocationModeTimeSelect(int position){
+        LocationModeTime item = mModeListBeans.get(position);
+        LocationTimeDialog dialog = new LocationTimeDialog();
+        dialog.show(getSupportFragmentManager(), item.getList(), new LocationTimeDialog.onLocationTimeChange() {
+            @Override
+            public void onTimeSelect(int time) {
+                mMode_id = item.getMid();
+                onSetLocationModeTime(time, item.getName());
+            }
+        });
+    }
+
+    /**
+     * 定位时间
+     * @param time
+     */
+    private void onSetLocationModeTime(int time, String name){
+        mSmode_value = String.valueOf(time);
+        for (LocationModeTime bean : mModeListBeans){
+            if (bean.getMid() == mMode_id && name.equals(bean.getName())){
+                bean.setSmode_value(mSmode_value);
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void showMessage(@NonNull String message) {
+        checkNotNull(message);
+        ArmsUtils.snackbarText(message);
+    }
+
+    @Override
+    public void launchActivity(@NonNull Intent intent) {
+        checkNotNull(intent);
+        ArmsUtils.startActivity(intent);
+    }
+
+    @Override
+    public void killMyself() {
+        finish();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
+    @OnClick({R.id.btn_submit, R.id.iv_low_power})
+    public void onViewClicked(View view) {
+        if (Utils.isButtonQuickClick()) {
+            switch (view.getId()) {
+                case R.id.btn_submit:
+                    submitLocationMode();
+                    break;
+                case R.id.iv_low_power:
+                    setLowPowerMode();
+                    break;
+            }
+        }
+    }
+
+    /**
+     * 设置定位模式
+     */
+    private void submitLocationMode(){
+        if (mMode_id == 0){
+            ToastUtils.show(getString(R.string.location_mode_select_hint));
+            return;
+        }
+        String modeValue = "";
+        for (LocationModeTime bean : mModeListBeans){
+            if (bean.getMid() == mMode_id){
+                if (!TextUtils.isEmpty(bean.getSmode_value())){
+                    if (TextUtils.isEmpty(modeValue)){
+                        modeValue = bean.getSmode_value();
+                    }else{
+                        modeValue = modeValue + "|" + bean.getSmode_value();
+                    }
+                }
+            }
+        }
+        if (TextUtils.isEmpty(modeValue)){
+            ToastUtils.show(getString(R.string.location_mode_select_hint));
+            return;
+        }
+
+        LocationModeSetPutBean.ParamsBean paramsBean = new LocationModeSetPutBean.ParamsBean();
+        paramsBean.setMode_id(mMode_id);
+        paramsBean.setSimei(mSimei);
+        paramsBean.setSmode_value(modeValue);
+
+        LocationModeSetPutBean bean = new LocationModeSetPutBean();
+        bean.setParams(paramsBean);
+        bean.setFunc(ModuleValueService.Fuc_For_Location_Mode_Set);
+        bean.setModule(ModuleValueService.Module_For_Location_Mode_Set);
+
+        if (getPresenter() != null){
+            getPresenter().submitLocationMode(bean);
+        }
+    }
+
+    private void setLowPowerMode(){
+        if (modeSwitch == 0) {
+            modeSwitch = 1;
+        } else {
+            modeSwitch = 0;
+        }
+        DeviceConfigSetPutBean.ParamsBean.ConfigBean.CarSwitchBean carSwitchBean = new DeviceConfigSetPutBean.ParamsBean.ConfigBean.CarSwitchBean();
+        carSwitchBean.setLowpowermodeswitch(modeSwitch);
+        DeviceConfigSetPutBean.ParamsBean.ConfigBean configBean = new DeviceConfigSetPutBean.ParamsBean.ConfigBean();
+        configBean.setCar_switch(carSwitchBean);
+
+        DeviceConfigSetPutBean.ParamsBean paramsBean = new DeviceConfigSetPutBean.ParamsBean();
+        paramsBean.setConfig(configBean);
+        paramsBean.setSimei(mSimeiBeas);
+
+        DeviceConfigSetPutBean bean = new DeviceConfigSetPutBean();
+        bean.setParams(paramsBean);
+        bean.setFunc(ModuleValueService.Fuc_For_Config_Set);
+        bean.setModule(ModuleValueService.Module_For_Config_Set);
+
+        if (getPresenter() != null) {
+            getPresenter().setDeviceConfig(bean);
+        }
+    }
+
+    @Override
+    public void getLocationModeSuccess(LocationModeResultBean locationModeResultBean) {
+        mModeListBeans.clear();
+        mMode_id = locationModeResultBean.getMode_id();
+        mSmode_value = locationModeResultBean.getSmode_value();
+        if (locationModeResultBean.getMode_list() != null && locationModeResultBean.getMode_list().size() > 0){
+            for (int i = 0; i < locationModeResultBean.getMode_list().size(); i++){
+                LocationModeResultBean.ModeListBean item = locationModeResultBean.getMode_list().get(i);
+                if (item.getUid() == 7){
+                    ArrayList<LocationModeTime> modeTimeBeans = DeviceUtils.parseLocationModeTime(item.getParam());
+                    String[] valus = null;
+                    if (!TextUtils.isEmpty(mSmode_value)){
+                        valus = mSmode_value.split("\\|");
+                    }
+                    for (int h = 0; h < modeTimeBeans.size(); h++){
+                        modeTimeBeans.get(h).setMid(item.getMid());
+                        if (valus != null){
+                            if (item.getMid() == mMode_id){
+                                if (h < valus.length){
+                                    modeTimeBeans.get(h).setSmode_value(valus[h]);
+                                }
+                            }
+                        }
+                    }
+                    mModeListBeans.addAll(modeTimeBeans);
+                }
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+        if (mModeListBeans.size() > 0){
+            btnSubmit.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void submitLocationModeSuccess(BaseBean baseBean) {
+        ToastUtils.show(getString(R.string.set_success));
+        getLocationMode();
+    }
+
+    @Override
+    public void getDeviceConfigSuccess(DeviceConfigResultBean deviceConfigResultBean) {
+       int  switchResult =  deviceConfigResultBean.getConfig().getCar_switch().getLowpowermodeswitch();
+        if (switchResult != -1) {
+            modeSwitch = switchResult;
+            rlLowPower.setVisibility(View.VISIBLE);
+            ivLowPower.setImageResource(switchResult == 0 ? R.drawable.icon_real_track_off : R.drawable.icon_switch_mode_on);
+        }
+    }
+
+    @Override
+    public void setDeviceConfigSuccess(BaseBean baseBean) {
+        ToastUtils.show(getString(R.string.set_success));
+        ivLowPower.setImageResource(modeSwitch == 0 ? R.drawable.icon_real_track_off : R.drawable.icon_switch_mode_on);
+    }
+}
